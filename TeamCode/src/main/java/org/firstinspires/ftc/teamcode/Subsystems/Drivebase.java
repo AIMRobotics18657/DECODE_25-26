@@ -10,6 +10,8 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.GamepadSettings;
+import org.firstinspires.ftc.teamcode.InputModification;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 
 public class Drivebase extends Mechanism {
@@ -53,9 +55,9 @@ public class Drivebase extends Mechanism {
     private void manualDrive(AIMPad gamepad) {
 
         /// add input mods: deadzone, exponent mod. in poweredInput
-        double y = -gamepad.getLeftStickY();
-        double x = gamepad.getLeftStickX();
-        double rx = gamepad.getRightStickX();
+        double y = InputModification.poweredInput(deadzonedStickInput(-gamepad.getLeftStickY()), GamepadSettings.EXPONENT_MODIFIER);
+        double x = InputModification.poweredInput(deadzonedStickInput(gamepad.getLeftStickX()), GamepadSettings.EXPONENT_MODIFIER);
+        double rx = InputModification.poweredInput(deadzonedStickInput(gamepad.getRightStickX()), GamepadSettings.EXPONENT_MODIFIER);
 
         // Create left stick vector
         Vector2d leftStick = new Vector2d(y, -x);
@@ -63,6 +65,13 @@ public class Drivebase extends Mechanism {
         drive.setDrivePowers(new PoseVelocity2d(leftStick, rx));
     }
 
+    private double deadzonedStickInput(double input) {
+        if (Math.abs(input) > GamepadSettings.GP1_STICK_DEADZONE) {
+            return input;
+        } else {
+            return 0;
+        }
+    }
     public void telemetry(Telemetry telemetry) {
 
     }

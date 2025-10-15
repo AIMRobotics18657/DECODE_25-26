@@ -2,58 +2,56 @@ package org.firstinspires.ftc.teamcode.Subsystems;
 
 import com.aimrobotics.aimlib.gamepad.AIMPad;
 import com.aimrobotics.aimlib.util.Mechanism;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.ConfigInfo;
+
 public class Launcher extends Mechanism {
 
-    DcMotorEx launcherRight;
-    DcMotorEx launcherLeft;]
+    private DcMotorEx launcher;
 
-    private double targetPower;
+    private double activeTargetPower = 0;
+
+    public enum launchPower {
+        OFF(0),
+        FAR(1),
+        CLOSE(0.2);
+
+        public final double power;
+        launchPower (double power) {this.power = power;};
+    }
+
+    public launchPower activeLaunchPower = launchPower.OFF;
 
 
     @Override
     public void init(HardwareMap hwMap) {
-        launcherRight = hwMap.get(DcMotorEx.class, "lr");
-        launcherLeft = hwMap.get(DcMotorEx.class, "ll");
-
-        setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        launcher = hwMap.get(DcMotorEx.class, ConfigInfo.launcher.getDeviceName());
 
     }
 
     @Override
     public void loop (AIMPad aimPad) {
-        setPower();
+        setLaunchPower();
     }
 
-    private void setMode(DcMotor.RunMode mode) {
-        launcherLeft.setMode(mode);
-        launcherRight.setMode(mode);
+    @Override
+    public void telemetry(Telemetry telemetry) {
+        telemetry.addData("Launch Position:", activeLaunchPower);
+        telemetry.addData("Launch Power:", launcher.getPower());
+    }
+    public void setLaunchPower() {
+        launcher.setPower(activeTargetPower);
     }
 
-    private void setDirection(DcMotorSimple.Direction direction) {
-        launcherLeft.setDirection(direction);
-        launcherRight.setDirection(direction);
+    public void setTargetPower(launchPower targetPower) {
+        activeTargetPower = targetPower.power;
+        activeLaunchPower = targetPower;
     }
-
-    private void setZeroPowerBehavior(DcMotor.ZeroPowerBehavior behavior) {
-        launcherLeft.setZeroPowerBehavior(behavior);
-        launcherRight.setZeroPowerBehavior(behavior);
-    }
-
-    private void setPower() {
-        launcherRight.setPower(targetPower);
-        launcherLeft.setPower(targetPower);
-    }
-
-    private void setTargetPower (double power) {
-
-    }
-
 
 }
