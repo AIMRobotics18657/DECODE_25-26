@@ -5,7 +5,7 @@ import com.aimrobotics.aimlib.gamepad.AIMPad;
 import com.aimrobotics.aimlib.util.Mechanism;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.InputHandler;
+import org.firstinspires.ftc.teamcode.Settings.InputHandler;
 
 public class Robot extends Mechanism {
 

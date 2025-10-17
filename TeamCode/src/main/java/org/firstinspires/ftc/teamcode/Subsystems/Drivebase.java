@@ -10,8 +10,8 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.GamepadSettings;
-import org.firstinspires.ftc.teamcode.InputModification;
+import org.firstinspires.ftc.teamcode.Settings.GamepadSettings;
+import org.firstinspires.ftc.teamcode.Settings.InputModification;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 
 public class Drivebase extends Mechanism {

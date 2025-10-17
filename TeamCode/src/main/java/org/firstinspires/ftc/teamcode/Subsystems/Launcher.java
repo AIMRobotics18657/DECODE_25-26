@@ -2,14 +2,11 @@ package org.firstinspires.ftc.teamcode.Subsystems;
 
 import com.aimrobotics.aimlib.gamepad.AIMPad;
 import com.aimrobotics.aimlib.util.Mechanism;
-import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.ConfigInfo;
+import org.firstinspires.ftc.teamcode.Settings.ConfigInfo;
 
 public class Launcher extends Mechanism {
 
@@ -32,7 +29,6 @@ public class Launcher extends Mechanism {
     @Override
     public void init(HardwareMap hwMap) {
         launcher = hwMap.get(DcMotorEx.class, ConfigInfo.launcher.getDeviceName());
-
     }
 
     @Override

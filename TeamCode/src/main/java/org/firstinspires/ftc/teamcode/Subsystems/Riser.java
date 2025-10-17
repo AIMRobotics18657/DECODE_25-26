@@ -10,8 +10,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.ConfigInfo;
-import org.firstinspires.ftc.teamcode.GamepadSettings;
+import org.firstinspires.ftc.teamcode.Settings.ConfigInfo;
+import org.firstinspires.ftc.teamcode.Settings.GamepadSettings;
 
 public class Riser extends Mechanism {
 

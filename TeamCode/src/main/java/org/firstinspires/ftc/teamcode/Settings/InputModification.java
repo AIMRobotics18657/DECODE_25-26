@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Settings;
 
 public class InputModification {
     public static double poweredInput(double base, int modifier) {
