@@ -1,31 +1,35 @@
 package org.firstinspires.ftc.teamcode.Settings;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad1;
+
 import com.aimrobotics.aimlib.gamepad.AIMPad;
 
 public class InputHandler {
 
     //TODO add rumble
 
-    public boolean SPIN_IN = false;
-    public boolean SPIN_OUT = false;
+    public boolean INTAKE_IN = false;
+    public boolean INTAKE_OUT = false;
 
-    public boolean FAR_LAUNCH = false;
+    //public boolean FAR_LAUNCH = false;
     public boolean CLOSE_LAUNCH = false;
+    public boolean REVERSE_LAUNCH = false;
 
-    public boolean TOGGLE_RISE = false;
+    //public boolean TOGGLE_RISE = false;
 
-    public boolean TOGGLE_ENDGAME = false;
+    //public boolean TOGGLE_ENDGAME = false;
 
     public void updateInputs(AIMPad aimPad1, AIMPad aimPad2) {
 
-        SPIN_IN = aimPad1.isAPressed();
-        SPIN_OUT = aimPad1.isBPressed();
+        INTAKE_IN = aimPad1.isLeftTriggerHeld();
+        INTAKE_OUT = aimPad1.isLeftBumperHeld();
 
-        FAR_LAUNCH = aimPad1.isYPressed();
-        CLOSE_LAUNCH = aimPad1.isXPressed();
+        //FAR_LAUNCH = aimPad1.isYPressed();
+        CLOSE_LAUNCH = aimPad1.isRightTriggerHeld();
+        REVERSE_LAUNCH = aimPad1.isRightBumperHeld();
 
-        TOGGLE_ENDGAME = aimPad1.getRightTrigger() > 0.1;
+        //TOGGLE_ENDGAME = aimPad1.getRightTrigger() > 0.1;
 
-        TOGGLE_RISE = aimPad1.isAPressed();
+        //TOGGLE_RISE = aimPad1.isAPressed();
     }
 }

@@ -10,9 +10,8 @@ import org.firstinspires.ftc.teamcode.Settings.InputHandler;
 public class Robot extends Mechanism {
 
     public Drivebase db;
-    public Ramp ramp = new Ramp();
-    public Launcher launcher = new Launcher();
-    public Riser riser = new Riser();
+    public ScoringAssembly scorer = new ScoringAssembly();
+    //public Riser riser = new Riser();
 
     private InputHandler handler = new InputHandler();
 
@@ -35,21 +34,38 @@ public class Robot extends Mechanism {
     @Override
     public void init(HardwareMap hwMap) {
         db.init(hwMap);
-        ramp.init(hwMap);
-        launcher.init(hwMap);
-        riser.init(hwMap);
+        scorer.ramp.init(hwMap);
+        scorer.launcher.init(hwMap);
+        //riser.init(hwMap);
     }
 
     @Override
     public void loop(AIMPad aimPad1, AIMPad aimPad2) {
-        handler.updateInputs(aimPad1, aimPad2);
-        ramp.loop(aimPad1);
-        launcher.loop(aimPad1);
-        riser.loop(aimPad1);
+        scorer.loop(aimPad1);
+        //riser.loop(aimPad1);
 
         if (!isAuto){
-            db.loop(aimPad2);
+            db.loop(aimPad1);
+            handler.updateInputs(aimPad1, aimPad2);
 
+            if (handler.INTAKE_IN) {
+                scorer.ramp.spinIn();
+            } else if (handler.INTAKE_OUT) {
+                scorer.ramp.spinOut();
+            } else {
+                scorer.ramp.stopSpin();
+            }
+
+            if (handler.CLOSE_LAUNCH) {
+                scorer.launcher.setTargetPower(Launcher.launchPower.CLOSE);
+            } else if (handler.REVERSE_LAUNCH){
+                scorer.launcher.setTargetPower(Launcher.launchPower.REVERSE);
+            } else {
+                scorer.launcher.setTargetPower(Launcher.launchPower.OFF);
+            }
+
+
+            /*
             switch(activeState) {
                 case SCORING:
                     scoringState();
@@ -58,30 +74,31 @@ public class Robot extends Mechanism {
                     endgameState();
                     break;
             }
+             */
+
         }
 
     }
 
+    /*
     public void scoringState() {
-        if (handler.SPIN_IN) {
+        if (handler.INTAKE_IN) {
             ramp.spinIn();
-        } else if (handler.SPIN_OUT) {
+        } else if (handler.INTAKE_OUT) {
             ramp.spinOut();
         } else {
             ramp.stopSpin();
         }
 
-        if (handler.FAR_LAUNCH) {
+        if (handler.CLOSE_LAUNCH) {
             launcher.setTargetPower(Launcher.launchPower.FAR);
-        } else if (handler.CLOSE_LAUNCH) {
-            launcher.setTargetPower(Launcher.launchPower.CLOSE);
         } else {
             launcher.setTargetPower(Launcher.launchPower.OFF);
         }
 
-        if (handler.TOGGLE_ENDGAME) {
-            activeState = robotState.ENDGAME;
-        }
+        //if (handler.TOGGLE_ENDGAME) {
+        //    activeState = robotState.ENDGAME;
+        //}
     }
 
     public void endgameState() {
@@ -99,4 +116,6 @@ public class Robot extends Mechanism {
             activeState = robotState.SCORING;
         }
     }
+
+ */
 }

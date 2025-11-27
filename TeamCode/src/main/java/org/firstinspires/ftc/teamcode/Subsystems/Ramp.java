@@ -20,7 +20,7 @@ public class Ramp extends Mechanism {
     }
 
     public void spinOut() {
-        ramp.setPower(0);
+        ramp.setPower(-1);
     }
 
     public void stopSpin() {

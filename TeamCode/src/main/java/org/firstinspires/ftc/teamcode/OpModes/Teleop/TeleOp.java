@@ -1,17 +1,18 @@
 package org.firstinspires.ftc.teamcode.OpModes.Teleop;
 
+import com.acmerobotics.roadrunner.Pose2d;
 import com.aimrobotics.aimlib.gamepad.AIMPad;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.Subsystems.Robot;
 
 /// Figure out groups
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="TeleOp", group="")
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="TeleOp", group = "AAA_COMP")
 public class TeleOp extends OpMode {
 
     AIMPad aimPad1;
     AIMPad aimPad2;
-    Robot robot;
+    Robot robot = new Robot(new Pose2d(0,0,0), false);
 
     @Override
     public void init() {
@@ -26,6 +27,10 @@ public class TeleOp extends OpMode {
         aimPad1.update(gamepad1);
         aimPad2.update(gamepad2);
         robot.loop(aimPad1,aimPad2);
+
+        telemetry.addData("LB Held", aimPad1.isLeftBumperHeld());
+        telemetry.addData("LB Pressed", aimPad1.isLeftBumperPressed());
+        telemetry.update();
     }
 
 }

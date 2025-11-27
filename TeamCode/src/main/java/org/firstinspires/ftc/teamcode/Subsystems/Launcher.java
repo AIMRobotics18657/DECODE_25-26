@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Subsystems;
 import com.aimrobotics.aimlib.gamepad.AIMPad;
 import com.aimrobotics.aimlib.util.Mechanism;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -17,7 +18,8 @@ public class Launcher extends Mechanism {
     public enum launchPower {
         OFF(0),
         FAR(1),
-        CLOSE(0.2);
+        CLOSE(0.2),
+        REVERSE(-1.);
 
         public final double power;
         launchPower (double power) {this.power = power;};
@@ -29,6 +31,7 @@ public class Launcher extends Mechanism {
     @Override
     public void init(HardwareMap hwMap) {
         launcher = hwMap.get(DcMotorEx.class, ConfigInfo.launcher.getDeviceName());
+        launcher.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
     @Override
