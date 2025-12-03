@@ -14,57 +14,63 @@ import org.firstinspires.ftc.teamcode.Subsystems.ScoringAssembly;
 
 @Autonomous (name="Red Side 12", group = "AAA_COMP", preselectTeleOp="TeleOp")
 public class RedSide12 extends LinearOpMode {
-    public AutoConstants constants;
+    //public AutoConstants constants = new AutoConstants();
 
-    public Robot robot = new Robot(constants.RED_START, true);
+    public Robot robot = new Robot(AutoConstants.RED_START, true);
     public boolean isDone = false;
+    public boolean secondShootStarted = false;
+    public boolean firstShootStarted = false;
 
     @Override
     public void runOpMode() {
         robot.init(hardwareMap);
 
-        Action TurnShoot = robot.db.drive.actionBuilder(constants.RED_START)
-                .turnTo(constants.RED_SHOOTING_ANGLE)
+        Action TurnShoot = robot.db.drive.actionBuilder(AutoConstants.RED_START)
+                .turnTo(AutoConstants.RED_SHOOTING_ANGLE)
                 .build();
 
-        Action lineOne = robot.db.drive.actionBuilder((constants.RED_SHOOTING))
-                .setTangent(90)
-                .splineToLinearHeading(constants.RED_LINE_ONE_SETUP, Math.toRadians(90))
-                .splineToLinearHeading(constants.RED_LINE_ONE_WALL, Math.toRadians(90))
-                .build();
-
-        Action secondShoot = robot.db.drive.actionBuilder(constants.RED_LINE_ONE_WALL)
-                .setTangent(Math.toRadians(270))
-                .splineToLinearHeading(constants.RED_SHOOTING, Math.toRadians(270))
-                .build();
-
-        Action lineTwo = robot.db.drive.actionBuilder(constants.RED_SHOOTING)
-                .setTangent(Math.toRadians(45))
-                .splineToLinearHeading(constants.RED_LINE_TWO_SETUP, Math.toRadians(90)) // setup position
-                .splineToLinearHeading(constants.RED_LINE_TWO_WALL, Math.toRadians(90))
-                .build();
-
-        Action thirdShoot = robot.db.drive.actionBuilder(constants.RED_LINE_TWO_WALL)
-                .setTangent(Math.toRadians(270))
-                .splineToLinearHeading(constants.RED_SHOOTING, Math.toRadians(270))
-                .build();
-
-        Action lineThree = robot.db.drive.actionBuilder(constants.RED_SHOOTING)
-                .setTangent(Math.toRadians(10))
-                .splineToLinearHeading(constants.RED_LINE_THREE_SETUP, Math.toRadians(15))
+        Action lineOne = robot.db.drive.actionBuilder(AutoConstants.RED_SHOOTING)
                 .setTangent(Math.toRadians(90))
-                .splineToLinearHeading(constants.RED_LINE_THREE_WALL, Math.toRadians(90))
+                .splineToLinearHeading(AutoConstants.RED_LINE_ONE_SETUP, Math.toRadians(90))
+                .splineToLinearHeading(AutoConstants.RED_LINE_ONE_WALL, Math.toRadians(90))
                 .build();
 
-        Action fourthShoot = robot.db.drive.actionBuilder(constants.RED_LINE_THREE_WALL)
+        Action secondShoot = robot.db.drive.actionBuilder(AutoConstants.RED_LINE_ONE_WALL)
                 .setTangent(Math.toRadians(270))
-                .splineToLinearHeading(constants.RED_SHOOTING, Math.toRadians(230))
+                .splineToLinearHeading(AutoConstants.RED_SHOOTING, Math.toRadians(270))
                 .build();
 
-        Action park = robot.db.drive.actionBuilder(constants.RED_SHOOTING)
-                .setTangent(Math.toRadians(320))
-                .splineToLinearHeading(constants.RED_PARK, Math.toRadians(330))
+        Action lineTwo = robot.db.drive.actionBuilder(AutoConstants.RED_SHOOTING)
+                .setTangent(Math.toRadians(45))
+                .splineToLinearHeading(AutoConstants.RED_LINE_TWO_SETUP, Math.toRadians(90)) // setup position
+                .splineToLinearHeading(AutoConstants.RED_LINE_TWO_WALL, Math.toRadians(90))
                 .build();
+
+        Action thirdShoot = robot.db.drive.actionBuilder(AutoConstants.RED_LINE_TWO_WALL)
+                .setTangent(Math.toRadians(270))
+                .splineToLinearHeading(AutoConstants.RED_SHOOTING, Math.toRadians(270))
+                .build();
+
+        Action lineThree = robot.db.drive.actionBuilder(AutoConstants.RED_SHOOTING)
+                .setTangent(Math.toRadians(10))
+                .splineToLinearHeading(AutoConstants.RED_LINE_THREE_SETUP, Math.toRadians(15))
+                .setTangent(Math.toRadians(90))
+                .splineToLinearHeading(AutoConstants.RED_LINE_THREE_WALL, Math.toRadians(90))
+                .build();
+
+        Action fourthShoot = robot.db.drive.actionBuilder(AutoConstants.RED_LINE_THREE_WALL)
+                .setTangent(Math.toRadians(270))
+                .splineToLinearHeading(AutoConstants.RED_SHOOTING, Math.toRadians(230))
+                .build();
+
+        Action park = robot.db.drive.actionBuilder(AutoConstants.RED_SHOOTING)
+                .setTangent(Math.toRadians(320))
+                .splineToLinearHeading(AutoConstants.RED_PARK, Math.toRadians(330))
+                .build();
+
+        telemetry.addLine("INIT OK, waiting for start...");
+        telemetry.update();
+        waitForStart(); //essential
 
 
         while (opModeIsActive()) {
@@ -72,31 +78,41 @@ public class RedSide12 extends LinearOpMode {
                     new ParallelAction(
                             (telemetryPacket) -> {
                                 robot.loop(new AIMPad(gamepad1), new AIMPad(gamepad2));
+                                telemetry.addLine("robot loop executed");
+                                telemetry.update();
                                 return !isDone;
                             },
                             new SequentialAction(
                                     TurnShoot,
-                                    (telemetryPacket) -> { // 1st shoot
-                                        robot.scorer.startShootThree();
-                                        return robot.scorer.activeShootCount == ScoringAssembly.ShootCount.THREE;
+                                    (telemetryPacket) -> {
+                                        if (!firstShootStarted) {
+                                            robot.scorer.startShootThree();
+                                            firstShootStarted = true;
+                                            telemetry.addLine("first shoot executed");
+                                            telemetry.update();
+                                        }
+                                        return !robot.scorer.shootingFinished;
                                     },
                                     lineOne,
                                     secondShoot,
-                                    (telemetryPacket) -> { // 2nd shoot
-                                        robot.scorer.startShootThree();
-                                        return robot.scorer.activeShootCount == ScoringAssembly.ShootCount.THREE;
+                                    (telemetryPacket) -> {
+                                        if (!secondShootStarted) {
+                                            robot.scorer.startShootThree();
+                                            secondShootStarted = true;
+                                        }
+                                        return !robot.scorer.shootingFinished;
                                     },
                                     lineTwo,
                                     thirdShoot,
                                     (telemetryPacket) -> { // 3rd shoot
                                         robot.scorer.startShootThree();
-                                        return robot.scorer.activeShootCount == ScoringAssembly.ShootCount.THREE;
+                                        return !robot.scorer.shootingFinished;
                                     },
                                     lineThree,
                                     fourthShoot,
-                                    (telemetryPacket) -> { // Clip preload
+                                    (telemetryPacket) -> { // 4th shoot
                                         robot.scorer.startShootThree();
-                                        return robot.scorer.activeShootCount == ScoringAssembly.ShootCount.THREE;
+                                        return !robot.scorer.shootingFinished;
                                     },
                                     park
                             ),
@@ -108,5 +124,8 @@ public class RedSide12 extends LinearOpMode {
             );
             break;
         }
+
+
+
     }
 }

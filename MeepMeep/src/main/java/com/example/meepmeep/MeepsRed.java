@@ -40,6 +40,7 @@ public class MeepsRed {
                         .setTangent(Math.toRadians(10))
                 .splineToLinearHeading(new Pose2d(36, 25, Math.toRadians(90)), Math.toRadians(15))//setup(might be hard to stop on a dime here)
                         .setTangent(Math.toRadians(90))
+                        .setTangent(Math.toRadians(90))
                 .splineToLinearHeading(new Pose2d(36, 53, Math.toRadians(90)), Math.toRadians(90))//collect
                         .setTangent(Math.toRadians(270))
                 .splineToLinearHeading(new Pose2d(-6, 7, Math.toRadians(150)), Math.toRadians(230))//to shooting

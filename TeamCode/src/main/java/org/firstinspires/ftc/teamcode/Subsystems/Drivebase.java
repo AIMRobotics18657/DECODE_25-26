@@ -49,17 +49,18 @@ public class Drivebase extends Mechanism {
     @Override
     public void loop(AIMPad gamepad) {
         manualDrive(gamepad);
+        drive.updatePoseEstimate();
 
     }
 
     private void manualDrive(AIMPad gamepad) {
 
-        double y = InputModification.poweredInput(deadzonedStickInput(-gamepad.getLeftStickY()), GamepadSettings.EXPONENT_MODIFIER);
-        double x = InputModification.poweredInput(deadzonedStickInput(gamepad.getLeftStickX()), GamepadSettings.EXPONENT_MODIFIER);
+        double y = InputModification.poweredInput(deadzonedStickInput(gamepad.getLeftStickY()), GamepadSettings.EXPONENT_MODIFIER);
+        double x = InputModification.poweredInput(deadzonedStickInput(-gamepad.getLeftStickX()), GamepadSettings.EXPONENT_MODIFIER);
         double rx = InputModification.poweredInput(deadzonedStickInput(-gamepad.getRightStickX()), GamepadSettings.EXPONENT_MODIFIER);
 
         // Create left stick vector
-        Vector2d leftStick = new Vector2d(y, -x);
+        Vector2d leftStick = new Vector2d(y, x);
 
         drive.setDrivePowers(new PoseVelocity2d(leftStick, rx));
     }

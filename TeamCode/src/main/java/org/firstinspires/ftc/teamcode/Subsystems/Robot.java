@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.Settings.InputHandler;
 
+import java.security.KeyStore;
+
 public class Robot extends Mechanism {
 
     public Drivebase db;
@@ -17,6 +19,7 @@ public class Robot extends Mechanism {
 
     public Pose2d startingPose;
     public boolean isAuto;
+    public boolean isFullOn;
 
     public enum robotState {
         SCORING,
@@ -34,8 +37,8 @@ public class Robot extends Mechanism {
     @Override
     public void init(HardwareMap hwMap) {
         db.init(hwMap);
-        scorer.ramp.init(hwMap);
-        scorer.launcher.init(hwMap);
+        scorer.init(hwMap);
+        isFullOn = false;
         //riser.init(hwMap);
     }
 
@@ -56,12 +59,19 @@ public class Robot extends Mechanism {
                 scorer.ramp.stopSpin();
             }
 
-            if (handler.CLOSE_LAUNCH) {
-                scorer.launcher.setTargetPower(Launcher.launchPower.CLOSE);
+            if (handler.FAR_LAUNCH) {
+                scorer.launcher.setTargetPower(Launcher.launchPower.FAR);
             } else if (handler.REVERSE_LAUNCH){
                 scorer.launcher.setTargetPower(Launcher.launchPower.REVERSE);
             } else {
                 scorer.launcher.setTargetPower(Launcher.launchPower.OFF);
+            }
+
+            if (handler.FULL_ON) {
+                isFullOn = true;
+                scorer.startShootOne();
+            } else {
+                isFullOn = false;
             }
 
 

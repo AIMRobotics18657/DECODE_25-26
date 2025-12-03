@@ -30,6 +30,9 @@ public class TeleOp extends OpMode {
 
         telemetry.addData("LB Held", aimPad1.isLeftBumperHeld());
         telemetry.addData("LB Pressed", aimPad1.isLeftBumperPressed());
+        telemetry.addData("is full on pressed", robot.isFullOn);
+        telemetry.addData("active shoot count", robot.scorer.activeShootCount);
+        telemetry.addData("current pose", robot.db.drive.localizer.getPose());
         telemetry.update();
     }
 
