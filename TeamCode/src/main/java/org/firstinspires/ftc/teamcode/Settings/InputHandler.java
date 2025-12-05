@@ -20,6 +20,10 @@ public class InputHandler {
     //public boolean TOGGLE_ENDGAME = false;
 
     public boolean FULL_ON = false;
+    public boolean WIND_UP = false;
+    public boolean WIND_UP_FINISHED = false;
+    public boolean TOGGLE_DRIVE_SPEED = false;
+    public boolean TOGGLE_GATE = false;
 
     public void updateInputs(AIMPad aimPad1, AIMPad aimPad2) {
 
@@ -27,13 +31,22 @@ public class InputHandler {
         INTAKE_OUT = aimPad1.isLeftBumperHeld();
 
         //CLOSE_LAUNCH = aimPad1.isYPressed();
-        //FAR_LAUNCH = aimPad1.isRightTriggerHeld();
+        FAR_LAUNCH = aimPad1.isRightTriggerHeld();
         REVERSE_LAUNCH = aimPad1.isRightBumperHeld();
 
         //TOGGLE_ENDGAME = aimPad1.getRightTrigger() > 0.1;
 
         //TOGGLE_RISE = aimPad1.isAPressed();
 
-        FULL_ON = aimPad1.isAHeld();
+        //FULL_ON = aimPad1.isAHeld();
+        WIND_UP = aimPad1.isAPressed();
+        WIND_UP_FINISHED = aimPad1.isBHeld();
+
+        TOGGLE_DRIVE_SPEED = aimPad1.isYPressed();
+
+        TOGGLE_GATE = aimPad1.isAnyDPadPressed();
+
+
+
     }
 }

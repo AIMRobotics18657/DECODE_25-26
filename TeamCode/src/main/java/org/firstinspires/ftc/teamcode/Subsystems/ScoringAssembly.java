@@ -11,15 +11,18 @@ public class ScoringAssembly {
     private ElapsedTime shootTimeThree = new ElapsedTime();
     private ElapsedTime shootTimeTwo = new ElapsedTime();
     private ElapsedTime shootTimeOne = new ElapsedTime();
+    private ElapsedTime shootTimeWindUp = new ElapsedTime();
     private static final double SHOOT_THREE_MS = 3000;
     private static final double SHOOT_TWO_MS = 2000;
     private static final double SHOOT_ONE_MS = 1000;
+    private static final double SHOOT_WIND_UP_MS = 500;
     public boolean shootingFinished;
 
     public enum ShootCount {
         THREE,
         TWO,
         ONE,
+        WIND_UP,
         NONE;
     }
     public ShootCount activeShootCount = ShootCount.NONE;
@@ -51,9 +54,20 @@ public class ScoringAssembly {
                 launcher.loop(aimPad1);
                 ramp.loop(aimPad1);
                 break;
+            case WIND_UP:
+                if (!shootingFinished) {
+                    updateWindUp();
+                } else {
+                    launcher.setTargetPower(Launcher.launchPower.OFF);
+                    ramp.stopSpin();
+                    activeShootCount = ShootCount.NONE;
+                    shootingFinished = true;
+                }
+                launcher.loop(aimPad1);
+                ramp.loop(aimPad1);
+                break;
             case NONE:
-                launcher.setTargetPower(Launcher.launchPower.OFF);
-                ramp.stopSpin();
+                ramp.closeGate();
                 launcher.loop(aimPad1);
                 ramp.loop(aimPad1);
                 break;
@@ -62,18 +76,18 @@ public class ScoringAssembly {
     }
 
     public void updateShootThree() {
-            launcher.setTargetPower(Launcher.launchPower.FAR);
-            ramp.spinIn();
-            if (shootTimeThree.milliseconds() > SHOOT_THREE_MS) {
-                launcher.setTargetPower(Launcher.launchPower.OFF);
-                shootingFinished = true;
-                activeShootCount = ShootCount.NONE;
+        if (shootingFinished) return;
+        updateWindUp();
+        if (shootTimeThree.milliseconds() > SHOOT_THREE_MS) {
+            launcher.setTargetPower(Launcher.launchPower.OFF);
+            shootingFinished = true;
+            activeShootCount = ShootCount.NONE;
         }
     }
 
     public void updateShootTwo() {
-        launcher.setTargetPower(Launcher.launchPower.FAR);
-        ramp.spinIn();
+        if (shootingFinished) return;
+        updateWindUp();
         if (shootTimeTwo.milliseconds() > SHOOT_TWO_MS) {
             launcher.setTargetPower(Launcher.launchPower.OFF);
             shootingFinished = true;
@@ -83,8 +97,8 @@ public class ScoringAssembly {
 
 
     public void updateShootOne() {
-        launcher.setTargetPower(Launcher.launchPower.FAR);
-        ramp.spinIn();
+        if (shootingFinished) return;
+        updateWindUp();
         if (shootTimeOne.milliseconds() > SHOOT_ONE_MS) {
             launcher.setTargetPower(Launcher.launchPower.OFF);
             shootingFinished = true;
@@ -96,21 +110,46 @@ public class ScoringAssembly {
         activeShootCount = ShootCount.THREE;
         shootingFinished = false;
         shootTimeThree.reset();
+        shootTimeWindUp.reset();
     }
 
     public void startShootTwo() {
         activeShootCount = ShootCount.TWO;
         shootingFinished = false;
         shootTimeTwo.reset();
+        shootTimeWindUp.reset();
     }
 
     public void startShootOne() {
         activeShootCount = ShootCount.ONE;
         shootingFinished = false;
         shootTimeOne.reset();
+        shootTimeWindUp.reset();
+    }
+/*
+    public void updateWindUp(double END_MS, ElapsedTime shootNum) {
+        launcher.setTargetPower(Launcher.launchPower.FAR);
+        if (shootTimeWindUp.milliseconds() > SHOOT_WIND_UP_MS) {
+            ramp.openGate();
+            ramp.spinIn();
+
+        } else if (shootTimeWindUp.milliseconds() > END_MS) {
+
+        }
     }
 
+ */
+public void updateWindUp() {
+    launcher.setTargetPower(Launcher.launchPower.FAR);
+    if (shootTimeWindUp.milliseconds() > SHOOT_WIND_UP_MS) {
+        ramp.openGate();
+        ramp.spinIn();
+    }
 
-
+    public void startWindUp() {
+        activeShootCount = ShootCount.WIND_UP;
+        shootingFinished = false;
+        shootTimeWindUp.reset();
+    }
 
 }

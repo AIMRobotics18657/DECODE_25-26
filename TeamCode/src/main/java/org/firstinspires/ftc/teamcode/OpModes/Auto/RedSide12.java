@@ -79,27 +79,21 @@ public class RedSide12 extends LinearOpMode {
                             (telemetryPacket) -> {
                                 robot.loop(new AIMPad(gamepad1), new AIMPad(gamepad2));
                                 telemetry.addLine("robot loop executed");
+                                telemetry.addData("is shooting finished?", robot.scorer.shootingFinished);
                                 telemetry.update();
                                 return !isDone;
                             },
                             new SequentialAction(
                                     TurnShoot,
                                     (telemetryPacket) -> {
-                                        if (!firstShootStarted) {
-                                            robot.scorer.startShootThree();
-                                            firstShootStarted = true;
-                                            telemetry.addLine("first shoot executed");
-                                            telemetry.update();
-                                        }
+                                        robot.scorer.loop(new AIMPad(gamepad1));
+                                        robot.scorer.startShootOne();
                                         return !robot.scorer.shootingFinished;
                                     },
                                     lineOne,
                                     secondShoot,
                                     (telemetryPacket) -> {
-                                        if (!secondShootStarted) {
-                                            robot.scorer.startShootThree();
-                                            secondShootStarted = true;
-                                        }
+                                        robot.scorer.startShootThree();
                                         return !robot.scorer.shootingFinished;
                                     },
                                     lineTwo,

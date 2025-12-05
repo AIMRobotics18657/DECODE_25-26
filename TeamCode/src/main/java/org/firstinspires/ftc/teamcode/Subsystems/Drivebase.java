@@ -23,6 +23,14 @@ public class Drivebase extends Mechanism {
         this.startingPose = startingPose;
     }
 
+    public enum driveSpeed {
+        REGULAR,
+        SLOW;
+    }
+    public driveSpeed activeDriveSpeed = driveSpeed.REGULAR;
+    
+    private static final double SLOW_SPEED_MULTIPLIER = 0.25; // 25% of regular speed
+
 
     @Override
     public void init(HardwareMap hwMap) {
@@ -36,26 +44,34 @@ public class Drivebase extends Mechanism {
         drive.leftFront.setZeroPowerBehavior(behavior);
         drive.leftBack.setZeroPowerBehavior(behavior);
         drive.rightFront.setZeroPowerBehavior(behavior);
-        drive.leftFront.setZeroPowerBehavior(behavior);
+        drive.rightBack.setZeroPowerBehavior(behavior);
     }
 
     public void setMode(DcMotorEx.RunMode mode) {
         drive.leftFront.setMode(mode);
         drive.leftBack.setMode(mode);
         drive.rightFront.setMode(mode);
-        drive.leftFront.setMode(mode);
+        drive.rightBack.setMode(mode);
     }
 
     @Override
     public void loop(AIMPad gamepad) {
-        manualDrive(gamepad);
+        switch (activeDriveSpeed) {
+            case REGULAR:
+                manualDrive(gamepad);
+                break;
+            case SLOW:
+                slowDrive(gamepad);
+                break;
+        }
+
         drive.updatePoseEstimate();
 
     }
 
     private void manualDrive(AIMPad gamepad) {
 
-        double y = InputModification.poweredInput(deadzonedStickInput(gamepad.getLeftStickY()), GamepadSettings.EXPONENT_MODIFIER);
+        double y = InputModification.poweredInput(deadzonedStickInput(-gamepad.getLeftStickY()), GamepadSettings.EXPONENT_MODIFIER);
         double x = InputModification.poweredInput(deadzonedStickInput(-gamepad.getLeftStickX()), GamepadSettings.EXPONENT_MODIFIER);
         double rx = InputModification.poweredInput(deadzonedStickInput(-gamepad.getRightStickX()), GamepadSettings.EXPONENT_MODIFIER);
 
@@ -65,6 +81,16 @@ public class Drivebase extends Mechanism {
         drive.setDrivePowers(new PoseVelocity2d(leftStick, rx));
     }
 
+    private void slowDrive(AIMPad gamepad) {
+        double y = InputModification.poweredInput(deadzonedStickInput(-gamepad.getLeftStickY()), GamepadSettings.EXPONENT_MODIFIER) * SLOW_SPEED_MULTIPLIER;
+        double x = InputModification.poweredInput(deadzonedStickInput(-gamepad.getLeftStickX()), GamepadSettings.EXPONENT_MODIFIER) * SLOW_SPEED_MULTIPLIER;
+        double rx = InputModification.poweredInput(deadzonedStickInput(-gamepad.getRightStickX()), GamepadSettings.EXPONENT_MODIFIER) * SLOW_SPEED_MULTIPLIER;
+
+        // Create left stick vector
+        Vector2d leftStick = new Vector2d(y, x);
+
+        drive.setDrivePowers(new PoseVelocity2d(leftStick, rx));
+    }
     private double deadzonedStickInput(double input) {
         if (Math.abs(input) > GamepadSettings.GP1_STICK_DEADZONE) {
             return input;
@@ -73,6 +99,6 @@ public class Drivebase extends Mechanism {
         }
     }
     public void telemetry(Telemetry telemetry) {
-
+        telemetry.addData("Drive Speed: ", activeDriveSpeed);
     }
 }

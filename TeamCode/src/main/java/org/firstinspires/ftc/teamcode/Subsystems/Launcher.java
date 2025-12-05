@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.Settings.ConfigInfo;
 public class Launcher extends Mechanism {
     //TODO: add spinup??
 
-    private DcMotorEx launcher;
+    public DcMotorEx launcher;
 
     private double activeTargetPower = 0;
 

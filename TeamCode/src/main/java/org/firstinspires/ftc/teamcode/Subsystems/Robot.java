@@ -5,6 +5,7 @@ import com.aimrobotics.aimlib.gamepad.AIMPad;
 import com.aimrobotics.aimlib.util.Mechanism;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Settings.InputHandler;
 
 import java.security.KeyStore;
@@ -20,6 +21,7 @@ public class Robot extends Mechanism {
     public Pose2d startingPose;
     public boolean isAuto;
     public boolean isFullOn;
+    public boolean isWindUp;
 
     public enum robotState {
         SCORING,
@@ -46,6 +48,9 @@ public class Robot extends Mechanism {
     public void loop(AIMPad aimPad1, AIMPad aimPad2) {
         scorer.loop(aimPad1);
         //riser.loop(aimPad1);
+        db.drive.updatePoseEstimate();
+
+        Pose2d rrPose = db.drive.localizer.getPose();
 
         if (!isAuto){
             db.loop(aimPad1);
@@ -55,24 +60,47 @@ public class Robot extends Mechanism {
                 scorer.ramp.spinIn();
             } else if (handler.INTAKE_OUT) {
                 scorer.ramp.spinOut();
-            } else {
-                scorer.ramp.stopSpin();
             }
 
             if (handler.FAR_LAUNCH) {
                 scorer.launcher.setTargetPower(Launcher.launchPower.FAR);
-            } else if (handler.REVERSE_LAUNCH){
+            } else if (handler.REVERSE_LAUNCH) {
                 scorer.launcher.setTargetPower(Launcher.launchPower.REVERSE);
             } else {
                 scorer.launcher.setTargetPower(Launcher.launchPower.OFF);
             }
 
-            if (handler.FULL_ON) {
-                isFullOn = true;
-                scorer.startShootOne();
-            } else {
-                isFullOn = false;
+            if (handler.WIND_UP) {
+                isWindUp = true;
+                scorer.shootingFinished = false;
+                scorer.startWindUp();
+            } else if (handler.WIND_UP_FINISHED){
+                isWindUp = false;
+                scorer.shootingFinished = true;
             }
+//TODO can't stop the ramp
+            if (handler.TOGGLE_DRIVE_SPEED) {
+                if (db.activeDriveSpeed == Drivebase.driveSpeed.REGULAR) {
+                    db.activeDriveSpeed = Drivebase.driveSpeed.SLOW;
+                } else {
+                    db.activeDriveSpeed = Drivebase.driveSpeed.REGULAR;
+                }
+            }
+
+            if (handler.TOGGLE_GATE) {
+                if (scorer.ramp.isGateOpen == false) {
+                    scorer.ramp.openGate();
+                } else {
+                    scorer.ramp.closeGate();
+                }
+            }
+
+            //if (handler.FULL_ON) {
+              //  isFullOn = true;
+                //scorer.startShootOne();
+            //} else {
+              //  isFullOn = false;
+            //}
 
 
             /*
@@ -88,6 +116,11 @@ public class Robot extends Mechanism {
 
         }
 
+    }
+
+    @Override
+    public void telemetry(Telemetry telemetry) {
+        //scorer.telemetry(telemetry);
     }
 
     /*

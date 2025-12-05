@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Subsystems;
 
+import com.acmerobotics.roadrunner.Pose2d;
 import com.aimrobotics.aimlib.gamepad.AIMPad;
 import com.aimrobotics.aimlib.util.Mechanism;
 import com.qualcomm.hardware.limelightvision.LLResult;
@@ -23,12 +24,16 @@ public class Limelight extends Mechanism {
     public YawPitchRollAngles orientation;
     public double heading;
 
+    private Pose2d globalPose = null;
+    private double MAX_STALENESS = 1000;
+    public boolean isStale;
+
     @Override
     public void init(HardwareMap hwMap) {
         lime = hwMap.get(Limelight3A.class, "lime");
         lime.setPollRateHz(100); ///Want this faster?
-        lime.start();
         lime.pipelineSwitch(0); //Starting pipeline
+        lime.start();
 
     }
 
@@ -36,8 +41,8 @@ public class Limelight extends Mechanism {
     public void loop(AIMPad gamepad) {
         result = lime.getLatestResult();
 
-        /// Switch this to MegaTag 2 to fuse w GoBildaPinpoint IMU
-        /// Use helper methods
+        // Check if result is valid before using it
+        //TODO do i need this
         if (result != null && result.isValid()) {
             botpose = result.getBotpose();
             if (botpose != null) {
@@ -52,6 +57,28 @@ public class Limelight extends Mechanism {
             }
         }
 
+
+
+        Pose3D fieldPose = result.getBotpose_MT2();
+        if (fieldPose != null) {
+            YawPitchRollAngles YPRAngles = fieldPose.getOrientation();
+            xPose = fieldPose.getPosition().x;
+            yPose = fieldPose.getPosition().y;
+            orientation = YPRAngles;
+            heading = YPRAngles.getYaw();
+
+            globalPose = new Pose2d(xPose, yPose, heading);
+            isStale = false;
+
+
+
+        }
+
+
+        if (result.getStaleness() > MAX_STALENESS) {
+            isStale = true;
+            globalPose = null;
+        }
 
     }
 
@@ -74,6 +101,5 @@ public class Limelight extends Mechanism {
         } else {
             telemetry.addData("Limelight", "No Targets");
         }
-
     }
 }

@@ -13,6 +13,7 @@ public class TeleOp extends OpMode {
     AIMPad aimPad1;
     AIMPad aimPad2;
     Robot robot = new Robot(new Pose2d(0,0,0), false);
+    //TODO: learn how save the pose
 
     @Override
     public void init() {
@@ -28,11 +29,15 @@ public class TeleOp extends OpMode {
         aimPad2.update(gamepad2);
         robot.loop(aimPad1,aimPad2);
 
+        /*
         telemetry.addData("LB Held", aimPad1.isLeftBumperHeld());
         telemetry.addData("LB Pressed", aimPad1.isLeftBumperPressed());
         telemetry.addData("is full on pressed", robot.isFullOn);
         telemetry.addData("active shoot count", robot.scorer.activeShootCount);
         telemetry.addData("current pose", robot.db.drive.localizer.getPose());
+        telemetry.addData("launcher power", robot.scorer.launcher.launcher.getPower());
+         */
+        robot.telemetry(telemetry);
         telemetry.update();
     }
 
