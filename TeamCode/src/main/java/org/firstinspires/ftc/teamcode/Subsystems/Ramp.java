@@ -1,5 +1,10 @@
 package org.firstinspires.ftc.teamcode.Subsystems;
 
+import android.graphics.Region;
+
+import com.aimrobotics.aimlib.gamepad.AIMPad;
+import com.aimrobotics.aimlib.subsystems.sds.ServoState;
+import com.aimrobotics.aimlib.subsystems.sds.StateDrivenServo;
 import com.aimrobotics.aimlib.util.Mechanism;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -11,13 +16,24 @@ import org.firstinspires.ftc.teamcode.Settings.ConfigInfo;
 public class Ramp extends Mechanism {
 
     private DcMotorEx ramp;
-    private Servo gate;
+    public StateDrivenServo gate;
     public boolean isGateOpen;
+
+    ServoState OPEN = new ServoState(0.0 );
+    ServoState CLOSED = new ServoState(.4);
 
     public void init(HardwareMap hwMap) {
         ramp = hwMap.get(DcMotorEx.class, ConfigInfo.ramp.getDeviceName());
-        gate = hwMap.get(Servo.class, ConfigInfo.gate.getDeviceName());
+        gate = new StateDrivenServo(new ServoState[]{OPEN, CLOSED}, CLOSED, ConfigInfo.gate.getDeviceName(), Servo.Direction.REVERSE);
         isGateOpen = false;
+
+        gate.init(hwMap);
+
+    }
+
+    @Override
+    public void loop(AIMPad aimpad) {
+        gate.loop(aimpad);
     }
 
     public void spinIn() {
@@ -35,15 +51,28 @@ public class Ramp extends Mechanism {
     @Override
     public void telemetry (Telemetry telemetry) {
         telemetry.addData("Ramp Power: ", ramp.getPower());
+        gate.telemetry(telemetry);
     }
 
     public void openGate() {
-        gate.setPosition(.25);
+        gate.setActiveTargetState(OPEN);
         isGateOpen = true;
     }
 
     public void closeGate() {
-        gate.setPosition(0);
+        gate.setActiveTargetState(CLOSED);
         isGateOpen = false;
+    }
+
+    public void toggleGate() {
+        if (isGateOpen) {
+            closeGate();
+        } else {
+            openGate();
+        }
+    }
+
+    public void custom(double position) {
+        gate.setActiveStateCustom(position);
     }
 }

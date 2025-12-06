@@ -40,11 +40,11 @@ public class InputHandler {
 
         //FULL_ON = aimPad1.isAHeld();
         WIND_UP = aimPad1.isAPressed();
-        WIND_UP_FINISHED = aimPad1.isBHeld();
+        WIND_UP_FINISHED = aimPad1.isBPressed();
 
         TOGGLE_DRIVE_SPEED = aimPad1.isYPressed();
 
-        TOGGLE_GATE = aimPad1.isAnyDPadPressed();
+        TOGGLE_GATE = aimPad1.isXPressed();
 
 
 

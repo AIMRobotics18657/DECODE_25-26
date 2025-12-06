@@ -2,7 +2,10 @@ package org.firstinspires.ftc.teamcode.OpModes.Auto;
 
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ParallelAction;
+import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.SleepAction;
+import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.aimrobotics.aimlib.gamepad.AIMPad;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -68,6 +71,10 @@ public class RedSide12 extends LinearOpMode {
                 .splineToLinearHeading(AutoConstants.RED_PARK, Math.toRadians(330))
                 .build();
 
+        Action park2 = robot.db.drive.actionBuilder(AutoConstants.RED_SHOOTING)
+                        .splineToLinearHeading(AutoConstants.RED_LINE_TWO_SETUP, Math.toRadians(90))
+                                .build();
+
         telemetry.addLine("INIT OK, waiting for start...");
         telemetry.update();
         waitForStart(); //essential
@@ -87,28 +94,24 @@ public class RedSide12 extends LinearOpMode {
                                     TurnShoot,
                                     (telemetryPacket) -> {
                                         robot.scorer.loop(new AIMPad(gamepad1));
-                                        robot.scorer.startShootOne();
-                                        return !robot.scorer.shootingFinished;
+                                        robot.scorer.launcher.setTargetPower(Launcher.launchPower.FAR);
+                                        new SleepAction(1);
+                                        robot.scorer.activeShootCount = ScoringAssembly.ShootCount.NONE; //TODO maybe need to manually shut off the motors
+                                        return false;
                                     },
-                                    lineOne,
-                                    secondShoot,
-                                    (telemetryPacket) -> {
-                                        robot.scorer.startShootThree();
-                                        return !robot.scorer.shootingFinished;
+                                    telemetryPacket -> {
+                                        robot.scorer.ramp.spinIn();
+                                        new SleepAction(3);
+                                        return false;
                                     },
-                                    lineTwo,
-                                    thirdShoot,
-                                    (telemetryPacket) -> { // 3rd shoot
-                                        robot.scorer.startShootThree();
-                                        return !robot.scorer.shootingFinished;
-                                    },
-                                    lineThree,
-                                    fourthShoot,
-                                    (telemetryPacket) -> { // 4th shoot
-                                        robot.scorer.startShootThree();
-                                        return !robot.scorer.shootingFinished;
-                                    },
-                                    park
+                                    telemetryPacket -> {
+                                        robot.scorer.loop(new AIMPad(gamepad1));
+                                        robot.scorer.ramp.stopSpin();
+                                        robot.scorer.launcher.setTargetPower(Launcher.launchPower.OFF);
+                                        return false;
+                                    }
+
+
                             ),
                             (telemetryPacket) -> { // End Auto
                                 isDone = true;

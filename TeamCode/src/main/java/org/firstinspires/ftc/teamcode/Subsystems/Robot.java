@@ -60,6 +60,8 @@ public class Robot extends Mechanism {
                 scorer.ramp.spinIn();
             } else if (handler.INTAKE_OUT) {
                 scorer.ramp.spinOut();
+            } else {
+                scorer.ramp.stopSpin();
             }
 
             if (handler.FAR_LAUNCH) {
@@ -74,7 +76,7 @@ public class Robot extends Mechanism {
                 isWindUp = true;
                 scorer.shootingFinished = false;
                 scorer.startWindUp();
-            } else if (handler.WIND_UP_FINISHED){
+            } else if (handler.WIND_UP_FINISHED) {
                 isWindUp = false;
                 scorer.shootingFinished = true;
             }
@@ -88,11 +90,7 @@ public class Robot extends Mechanism {
             }
 
             if (handler.TOGGLE_GATE) {
-                if (scorer.ramp.isGateOpen == false) {
-                    scorer.ramp.openGate();
-                } else {
-                    scorer.ramp.closeGate();
-                }
+                scorer.ramp.toggleGate();
             }
 
             //if (handler.FULL_ON) {
@@ -121,6 +119,7 @@ public class Robot extends Mechanism {
     @Override
     public void telemetry(Telemetry telemetry) {
         //scorer.telemetry(telemetry);
+        telemetry.addData("is gatep resesd", handler.TOGGLE_GATE);
     }
 
     /*

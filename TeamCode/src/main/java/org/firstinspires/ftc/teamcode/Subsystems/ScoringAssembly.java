@@ -8,14 +8,14 @@ public class ScoringAssembly {
     public Launcher launcher = new Launcher();
     public Ramp ramp = new Ramp();
 
-    private ElapsedTime shootTimeThree = new ElapsedTime();
+    public ElapsedTime shootTimeThree = new ElapsedTime();
     private ElapsedTime shootTimeTwo = new ElapsedTime();
-    private ElapsedTime shootTimeOne = new ElapsedTime();
-    private ElapsedTime shootTimeWindUp = new ElapsedTime();
-    private static final double SHOOT_THREE_MS = 3000;
+    public ElapsedTime shootTimeOne = new ElapsedTime();
+    public ElapsedTime shootTimeWindUp = new ElapsedTime();
+    public static final double SHOOT_THREE_MS = 3000;
     private static final double SHOOT_TWO_MS = 2000;
     private static final double SHOOT_ONE_MS = 1000;
-    private static final double SHOOT_WIND_UP_MS = 500;
+    public static final double SHOOT_WIND_UP_MS = 750;
     public boolean shootingFinished;
 
     public enum ShootCount {
@@ -30,6 +30,7 @@ public class ScoringAssembly {
     public void init(HardwareMap hwMap) {
         launcher.init(hwMap);
         ramp.init(hwMap);
+        ramp.closeGate();
         shootingFinished = false;
     }
 
@@ -67,7 +68,6 @@ public class ScoringAssembly {
                 ramp.loop(aimPad1);
                 break;
             case NONE:
-                ramp.closeGate();
                 launcher.loop(aimPad1);
                 ramp.loop(aimPad1);
                 break;
@@ -139,11 +139,13 @@ public class ScoringAssembly {
     }
 
  */
-public void updateWindUp() {
-    launcher.setTargetPower(Launcher.launchPower.FAR);
-    if (shootTimeWindUp.milliseconds() > SHOOT_WIND_UP_MS) {
-        ramp.openGate();
-        ramp.spinIn();
+    public void updateWindUp() {
+        launcher.setTargetPower(Launcher.launchPower.FAR);
+        ramp.openGate();// why reversed
+        if (shootTimeWindUp.milliseconds() > SHOOT_WIND_UP_MS) {
+            ramp.closeGate();
+            ramp.spinIn();
+        }
     }
 
     public void startWindUp() {
