@@ -8,13 +8,14 @@ import com.aimrobotics.aimlib.util.Mechanism;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Settings.GamepadSettings;
 import org.firstinspires.ftc.teamcode.Settings.InputModification;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 
-public class Drivebase extends Mechanism {
+public class Drivebase {
 
     public MecanumDrive drive;
     private Pose2d startingPose;
@@ -22,6 +23,12 @@ public class Drivebase extends Mechanism {
     public Drivebase (Pose2d startingPose) {
         this.startingPose = startingPose;
     }
+
+    public double auto_x;
+    public double auto_y;
+    public double auto_rx;
+    public ElapsedTime timer = new ElapsedTime();
+
 
     public enum driveSpeed {
         REGULAR,
@@ -32,7 +39,6 @@ public class Drivebase extends Mechanism {
     private static final double SLOW_SPEED_MULTIPLIER = 0.25; // 25% of regular speed
 
 
-    @Override
     public void init(HardwareMap hwMap) {
         drive = new MecanumDrive(hwMap, startingPose);
         setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -54,15 +60,22 @@ public class Drivebase extends Mechanism {
         drive.rightBack.setMode(mode);
     }
 
-    @Override
-    public void loop(AIMPad gamepad) {
-        switch (activeDriveSpeed) {
-            case REGULAR:
-                manualDrive(gamepad);
-                break;
-            case SLOW:
-                slowDrive(gamepad);
-                break;
+    public void loop(AIMPad gamepad, boolean isAuto) {
+
+        if (!isAuto) {
+            switch (activeDriveSpeed) {
+                case REGULAR:
+                    manualDrive(gamepad);
+                    break;
+                case SLOW:
+                    slowDrive(gamepad);
+                    break;
+            }
+        } else if (isAuto) {
+            if (timer.milliseconds() < 1000) {
+                autoDrive();
+            }
+
         }
 
         drive.updatePoseEstimate();
@@ -79,6 +92,21 @@ public class Drivebase extends Mechanism {
         Vector2d leftStick = new Vector2d(y, x);
 
         drive.setDrivePowers(new PoseVelocity2d(leftStick, rx));
+    }
+    public void setAutoDrivePowers(double x, double y, double rx) {
+        this.auto_x = x;
+        this.auto_y = y;
+        this.auto_rx = rx;
+        this.timer = timer;
+        timer.reset();
+    }
+
+    public void autoDrive() {
+
+        // Create left stick vector
+        Vector2d leftStick = new Vector2d(auto_y, auto_x);
+
+        drive.setDrivePowers(new PoseVelocity2d(leftStick, auto_rx));
     }
 
     private void slowDrive(AIMPad gamepad) {

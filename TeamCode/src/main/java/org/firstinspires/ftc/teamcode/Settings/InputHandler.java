@@ -10,6 +10,8 @@ public class InputHandler {
 
     public boolean INTAKE_IN = false;
     public boolean INTAKE_OUT = false;
+    public boolean GRANT_INTAKE_IN = false;
+    public boolean GRANT_INTAKE_OUT = false;
 
     public boolean FAR_LAUNCH = false;
     //public boolean CLOSE_LAUNCH = false;
@@ -27,8 +29,12 @@ public class InputHandler {
 
     public void updateInputs(AIMPad aimPad1, AIMPad aimPad2) {
 
-        INTAKE_IN = aimPad1.isLeftTriggerHeld();
-        INTAKE_OUT = aimPad1.isLeftBumperHeld();
+        INTAKE_IN = aimPad2.isLeftTriggerHeld();
+        INTAKE_OUT = aimPad2.isLeftBumperHeld();
+
+        GRANT_INTAKE_IN = aimPad1.isLeftTriggerHeld();
+        GRANT_INTAKE_OUT = aimPad1.isLeftBumperHeld();
+
 
         //CLOSE_LAUNCH = aimPad1.isYPressed();
         FAR_LAUNCH = aimPad1.isRightTriggerHeld();
@@ -44,7 +50,7 @@ public class InputHandler {
 
         TOGGLE_DRIVE_SPEED = aimPad1.isYPressed();
 
-        TOGGLE_GATE = aimPad1.isXPressed();
+        TOGGLE_GATE = aimPad2.isXPressed();
 
 
 

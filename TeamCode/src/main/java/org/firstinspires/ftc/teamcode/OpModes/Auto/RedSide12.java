@@ -9,13 +9,16 @@ import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.aimrobotics.aimlib.gamepad.AIMPad;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Subsystems.Launcher;
 import org.firstinspires.ftc.teamcode.Subsystems.Robot;
 import org.firstinspires.ftc.teamcode.Subsystems.ScoringAssembly;
 
 @Autonomous (name="Red Side 12", group = "AAA_COMP", preselectTeleOp="TeleOp")
+@Disabled
 public class RedSide12 extends LinearOpMode {
     //public AutoConstants constants = new AutoConstants();
 
@@ -23,6 +26,9 @@ public class RedSide12 extends LinearOpMode {
     public boolean isDone = false;
     public boolean secondShootStarted = false;
     public boolean firstShootStarted = false;
+    ElapsedTime timer = new ElapsedTime();
+    public boolean started = false;
+
 
     @Override
     public void runOpMode() {
@@ -75,6 +81,13 @@ public class RedSide12 extends LinearOpMode {
                         .splineToLinearHeading(AutoConstants.RED_LINE_TWO_SETUP, Math.toRadians(90))
                                 .build();
 
+        Action back20 = robot.db.drive.actionBuilder(new Pose2d(0, 0, 90))
+                .splineToLinearHeading(new Pose2d(0, -20, 0), Math.toRadians(90))
+                        .build();
+        Action Turn45 = robot.db.drive.actionBuilder(new Pose2d(0, 0, 90))
+                        .turn(45)
+                                .build();
+
         telemetry.addLine("INIT OK, waiting for start...");
         telemetry.update();
         waitForStart(); //essential
@@ -85,29 +98,46 @@ public class RedSide12 extends LinearOpMode {
                     new ParallelAction(
                             (telemetryPacket) -> {
                                 robot.loop(new AIMPad(gamepad1), new AIMPad(gamepad2));
+                                robot.scorer.ramp.openGate(); //switched
                                 telemetry.addLine("robot loop executed");
                                 telemetry.addData("is shooting finished?", robot.scorer.shootingFinished);
                                 telemetry.update();
                                 return !isDone;
                             },
                             new SequentialAction(
-                                    TurnShoot,
+                                    back20,
+                                    Turn45,
                                     (telemetryPacket) -> {
                                         robot.scorer.loop(new AIMPad(gamepad1));
-                                        robot.scorer.launcher.setTargetPower(Launcher.launchPower.FAR);
-                                        new SleepAction(1);
-                                        robot.scorer.activeShootCount = ScoringAssembly.ShootCount.NONE; //TODO maybe need to manually shut off the motors
-                                        return false;
-                                    },
-                                    telemetryPacket -> {
-                                        robot.scorer.ramp.spinIn();
-                                        new SleepAction(3);
-                                        return false;
-                                    },
-                                    telemetryPacket -> {
-                                        robot.scorer.loop(new AIMPad(gamepad1));
-                                        robot.scorer.ramp.stopSpin();
-                                        robot.scorer.launcher.setTargetPower(Launcher.launchPower.OFF);
+
+                                        if (!started) {
+                                            robot.scorer.launcher.setTargetPower(Launcher.launchPower.FAR);
+                                            robot.scorer.ramp.spinIn();
+                                            robot.scorer.ramp.openGate(); //switched
+                                            timer.reset();
+                                            started = true;
+                                        }
+                                        if (timer.milliseconds() < 1000) {
+                                            robot.scorer.launcher.setTargetPower(Launcher.launchPower.FAR);
+                                            robot.scorer.ramp.spinIn();
+                                            return true;
+                                        }
+
+                                        if (timer.milliseconds() > 1000 && timer.milliseconds() < 2000) {
+                                            robot.scorer.ramp.closeGate(); //switched
+                                            robot.scorer.launcher.setTargetPower(Launcher.launchPower.FAR);
+                                            robot.scorer.ramp.spinIn();
+                                            return true;
+                                            }
+
+                                        if (timer.milliseconds() > 2000) {
+                                            robot.scorer.launcher.setTargetPower(Launcher.launchPower.OFF);
+                                            robot.scorer.ramp.stopSpin();
+                                            return false;
+                                        }
+
+                                        telemetry.addData("timer", timer.milliseconds());
+                                        telemetry.update();
                                         return false;
                                     }
 

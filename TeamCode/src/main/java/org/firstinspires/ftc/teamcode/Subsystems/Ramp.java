@@ -24,7 +24,7 @@ public class Ramp extends Mechanism {
 
     public void init(HardwareMap hwMap) {
         ramp = hwMap.get(DcMotorEx.class, ConfigInfo.ramp.getDeviceName());
-        gate = new StateDrivenServo(new ServoState[]{OPEN, CLOSED}, CLOSED, ConfigInfo.gate.getDeviceName(), Servo.Direction.REVERSE);
+        gate = new StateDrivenServo(new ServoState[]{OPEN, CLOSED}, OPEN, ConfigInfo.gate.getDeviceName(), Servo.Direction.REVERSE);
         isGateOpen = false;
 
         gate.init(hwMap);
@@ -51,7 +51,7 @@ public class Ramp extends Mechanism {
     @Override
     public void telemetry (Telemetry telemetry) {
         telemetry.addData("Ramp Power: ", ramp.getPower());
-        gate.telemetry(telemetry);
+        telemetry.addData("is Gate Open", isGateOpen);
     }
 
     public void openGate() {

@@ -53,12 +53,12 @@ public class Robot extends Mechanism {
         Pose2d rrPose = db.drive.localizer.getPose();
 
         if (!isAuto){
-            db.loop(aimPad1);
+            db.loop(aimPad1, false);
             handler.updateInputs(aimPad1, aimPad2);
 
-            if (handler.INTAKE_IN) {
+            if (handler.INTAKE_IN || handler.GRANT_INTAKE_IN) {
                 scorer.ramp.spinIn();
-            } else if (handler.INTAKE_OUT) {
+            } else if (handler.INTAKE_OUT || handler.GRANT_INTAKE_OUT) {
                 scorer.ramp.spinOut();
             } else {
                 scorer.ramp.stopSpin();
@@ -118,8 +118,8 @@ public class Robot extends Mechanism {
 
     @Override
     public void telemetry(Telemetry telemetry) {
-        //scorer.telemetry(telemetry);
-        telemetry.addData("is gatep resesd", handler.TOGGLE_GATE);
+        scorer.telemetry(telemetry);
+        db.telemetry(telemetry);
     }
 
     /*

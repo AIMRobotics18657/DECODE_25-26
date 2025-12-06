@@ -1,10 +1,13 @@
 package org.firstinspires.ftc.teamcode.Subsystems;
 
 import com.aimrobotics.aimlib.gamepad.AIMPad;
+import com.aimrobotics.aimlib.util.Mechanism;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-public class ScoringAssembly {
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
+public class ScoringAssembly extends Mechanism {
     public Launcher launcher = new Launcher();
     public Ramp ramp = new Ramp();
 
@@ -152,6 +155,11 @@ public class ScoringAssembly {
         activeShootCount = ShootCount.WIND_UP;
         shootingFinished = false;
         shootTimeWindUp.reset();
+    }
+
+    public void telemetry(Telemetry telemetry){
+        ramp.telemetry(telemetry);
+        launcher.telemetry(telemetry);
     }
 
 }
