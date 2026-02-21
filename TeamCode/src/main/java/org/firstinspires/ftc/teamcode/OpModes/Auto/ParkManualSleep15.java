@@ -32,7 +32,7 @@ public class ParkManualSleep15 extends LinearOpMode {
             timer.reset();
             if (timer.milliseconds() < 1000) {
 
-                db.setAutoDrivePowers(0, .5 , 0);
+//                db.setAutoDrivePowers(0, .5 , 0);
                 db.loop(new AIMPad(gamepad1), true);
             }
             telemetry.addData("timer", timer.milliseconds());

@@ -81,13 +81,13 @@ public class Robot extends Mechanism {
                 scorer.shootingFinished = true;
             }
 //TODO can't stop the ramp
-            if (handler.TOGGLE_DRIVE_SPEED) {
-                if (db.activeDriveSpeed == Drivebase.driveSpeed.REGULAR) {
-                    db.activeDriveSpeed = Drivebase.driveSpeed.SLOW;
-                } else {
-                    db.activeDriveSpeed = Drivebase.driveSpeed.REGULAR;
-                }
-            }
+//            if (handler.TOGGLE_DRIVE_SPEED) {
+//                if (db.activeDriveSpeed == Drivebase.driveSpeed.REGULAR) {
+//                    db.activeDriveSpeed = Drivebase.driveSpeed.SLOW;
+//                } else {
+//                    db.activeDriveSpeed = Drivebase.driveSpeed.REGULAR;
+//                }
+//            }
 
             if (handler.TOGGLE_GATE) {
                 scorer.ramp.toggleGate();
@@ -119,7 +119,7 @@ public class Robot extends Mechanism {
     @Override
     public void telemetry(Telemetry telemetry) {
         scorer.telemetry(telemetry);
-        db.telemetry(telemetry);
+//        db.telemetry(telemetry);
     }
 
     /*

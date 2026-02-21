@@ -18,7 +18,6 @@ import org.firstinspires.ftc.teamcode.Subsystems.Robot;
 import org.firstinspires.ftc.teamcode.Subsystems.ScoringAssembly;
 
 @Autonomous (name="Red Side 12", group = "AAA_COMP", preselectTeleOp="TeleOp")
-@Disabled
 public class RedSide12 extends LinearOpMode {
     //public AutoConstants constants = new AutoConstants();
 
