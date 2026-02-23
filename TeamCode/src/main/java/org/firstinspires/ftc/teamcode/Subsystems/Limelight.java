@@ -8,13 +8,15 @@ import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 public class Limelight extends Mechanism {
 
     private Limelight3A lime;
-    LLResult result;
+    LLResult llResult;
+    double distance;
     Pose3D botpose;
 
     public double xPose;
@@ -23,6 +25,7 @@ public class Limelight extends Mechanism {
     //not sure abt this yet
     public YawPitchRollAngles orientation;
     public double heading;
+
 
     private Pose2d globalPose = null;
     private double MAX_STALENESS = 1000;
@@ -39,67 +42,37 @@ public class Limelight extends Mechanism {
 
     @Override
     public void loop(AIMPad gamepad) {
-        result = lime.getLatestResult();
+        llResult = lime.getLatestResult();
 
-        // Check if result is valid before using it
-        //TODO do i need this
-        if (result != null && result.isValid()) {
-            botpose = result.getBotpose();
-            if (botpose != null) {
-                xPose = botpose.getPosition().x;
-                yPose = botpose.getPosition().y;
-
-                //not too sure about orientation yet prob gonna have to use megatag 2
-                orientation = botpose.getOrientation();
-                heading = orientation.getYaw();
-
-
-            }
-        }
-
-
-
-        Pose3D fieldPose = result.getBotpose_MT2();
-        if (fieldPose != null) {
-            YawPitchRollAngles YPRAngles = fieldPose.getOrientation();
-            xPose = fieldPose.getPosition().x;
-            yPose = fieldPose.getPosition().y;
-            orientation = YPRAngles;
-            heading = YPRAngles.getYaw();
-
-            globalPose = new Pose2d(xPose, yPose, heading);
-            isStale = false;
-
-
-
-        }
-
-
-        if (result.getStaleness() > MAX_STALENESS) {
-            isStale = true;
-            globalPose = null;
-        }
-
+        distance =  getDistance(llResult.getTa());
     }
 
+    public double getDistance(double ta) {
+        double dist = 70.50987 * Math.pow(ta, -0.5421864);
+         return dist;
+    }
     public void telemetry(Telemetry telemetry) {
 
 
-        if (result != null && result.isValid()) {
-            //These variables are only for telemetry and debugging
-            double tx = result.getTx(); // How far left or right the target is (degrees)
-            double ty = result.getTy(); // How far up or down the target is (degrees)
-            double ta = result.getTa(); // How big the target looks (0%-100% of the image)
 
-            telemetry.addData("Target X", tx);
-            telemetry.addData("Target Y", ty);
-            telemetry.addData("Target Area", ta);
+        telemetry.addData("LL Null?", llResult == null);
 
-            //Bot position relative to field
-            /// change this later to MegaTag 2
-            telemetry.addData("MT1 Location", "(" + xPose + ", " + yPose + ")");
-        } else {
-            telemetry.addData("Limelight", "No Targets");
+        if (llResult != null) {
+            telemetry.addData("LL Valid?", llResult.isValid());
+
+            Pose3D botpose = llResult.getBotpose_MT2();
+            telemetry.addData("MT2 Null?", botpose == null);
+
+            telemetry.addData("tgtx", llResult.getTx());
+            telemetry.addData("tgta", llResult.getTa());
+
+            if (botpose != null) {
+                telemetry.addData("Botpose", botpose.toString());
+            }
         }
+
+        telemetry.addData("calculated dist", distance);
+        telemetry.update();
     }
 }
+

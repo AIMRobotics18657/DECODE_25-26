@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.Settings.InputHandler;
 import org.firstinspires.ftc.teamcode.Subsystems.Robot;
+import org.firstinspires.ftc.teamcode.Subsystems.RobotV2;
 
 /// Figure out groups
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="TeleOp", group = "AAA_COMP")
@@ -13,7 +14,7 @@ public class TeleOp extends OpMode {
 
     AIMPad aimPad1;
     AIMPad aimPad2;
-    Robot robot = new Robot(new Pose2d(0,0,0), false);
+    RobotV2 robot = new RobotV2(new Pose2d(0,0,0), false);
     //TODO: learn how save the pose
 
     @Override
