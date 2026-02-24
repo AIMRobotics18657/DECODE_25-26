@@ -12,6 +12,7 @@ public class ScoringAssemblyV2 extends Mechanism {
     public Intake intake = new Intake();
     public Hood hood = new Hood();
     public Gate gate = new Gate();
+    public double hoodDeg;
 
     private double g = 9.8;
     private double deltaH = 1.0815; //meters
@@ -39,9 +40,11 @@ public class ScoringAssemblyV2 extends Mechanism {
     public void score(double dist, double omega, double offsetDeg) {
 
         double scale = 2 * Math.PI / 628;
-        double omegaScaled = omega * scale;
-        hood.hood.setPosition(hoodDegrees(dist, omega, offsetDeg)); //TODO does this get the scale?\
-        launcher.setVelo(omegaScaled);
+        double gearRatio = 14/10;
+        double launcherOmegaScaled = omega * scale ;
+        double hoodOmegaScaled = omega * gearRatio;
+        hood.hood.setPosition(hoodDegrees(dist, hoodOmegaScaled, offsetDeg)); //TODO does this get the scale?\
+        launcher.setVelo(launcherOmegaScaled);
 
         //TODO add thing for gate to sync with the hood and launcher
     }
@@ -51,9 +54,9 @@ public class ScoringAssemblyV2 extends Mechanism {
         double v = omega * wheelRadius;
 
         double hoodRad = solveTheta(dist, v);
-        double hoodDeg = radToDeg(hoodRad);
-        double minDeg = 30;
-        double maxDeg = 65;
+        hoodDeg = radToDeg(hoodRad);
+        double minDeg = 17;
+        double maxDeg = 56;
         hoodDeg += offsetDeg;
 
         double hoodPos = (hoodDeg - minDeg) /(maxDeg - minDeg);
@@ -76,6 +79,7 @@ public class ScoringAssemblyV2 extends Mechanism {
 
     @Override
     public void telemetry(Telemetry telemetry) {
+        telemetry.addData("hood angle", hoodDeg);
         launcher.telemetry(telemetry);
         intake.telemetry(telemetry);
         hood.telemetry(telemetry);

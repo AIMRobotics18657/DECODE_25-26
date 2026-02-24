@@ -9,7 +9,6 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.PinpointLocalizer;
 import org.firstinspires.ftc.teamcode.Settings.InputHandler;
 
-import java.security.KeyStore;
 
 public class RobotV2 extends Mechanism {
 
@@ -57,7 +56,7 @@ public class RobotV2 extends Mechanism {
 
             if (handler.CLOSE_LAUNCH){
                 //scorer.launcher.setVelo(300 * 0.01);
-                scorer.score(1,80,0);
+                scorer.score(1.5,150,0);
             } else if (handler.FAR_LAUNCH){
                 scorer.launcher.setVelo(0);
             }
@@ -72,9 +71,9 @@ public class RobotV2 extends Mechanism {
             }
 
             if (handler.HOOD_DOWN) {
-                scorer.hood.hood.setPosition(scorer.hood.hood.getPosition() - .05);
+                scorer.hood.hood.setPosition(scorer.hood.hood.getPosition() + .01);
             } else if (handler.HOOD_UP) {
-                scorer.hood.hood.setPosition(scorer.hood.hood.getPosition() + .05);
+                scorer.hood.hood.setPosition(scorer.hood.hood.getPosition() - .01);
             }
 
 //            if (handler.FAR_LAUNCH) {
@@ -113,6 +112,7 @@ public class RobotV2 extends Mechanism {
     @Override
     public void telemetry(Telemetry telemetry) {
         scorer.telemetry(telemetry);
+        scorer.hood.hood.getPosition();
         //db.telemetry(telemetry);
         telemetry.addData("rr pose", rrPose);
     }

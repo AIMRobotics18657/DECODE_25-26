@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -26,7 +27,11 @@ public class VeloLaunch extends Mechanism {
         setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        launcherTwo.setDirection(DcMotorSimple.Direction.REVERSE);
+        launcherTwo.setDirection(DcMotorEx.Direction.REVERSE);
+
+        launcherTwo.setVelocityPIDFCoefficients(1000,0,0, 15);
+        launcherOne.setVelocityPIDFCoefficients(1000,0,0, 15);
+
 
     }
 
@@ -51,7 +56,15 @@ public class VeloLaunch extends Mechanism {
 
     @Override
     public void telemetry(Telemetry telemetry) {
-        telemetry.addData("Velocity", launcherOne.getVelocity(AngleUnit.RADIANS));
-        telemetry.addData("Encoder ticks", launcherOne.getCurrentPosition());
+//        telemetry.addData("Velocity", launcherOne.getVelocity(AngleUnit.RADIANS));
+//        telemetry.addData("Encoder ticks", launcherOne.getCurrentPosition());
+//
+//        PIDFCoefficients coeffs = launcherTwo.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER);
+//
+//        telemetry.addData("P", coeffs.p);
+//        telemetry.addData("I", coeffs.i);
+//        telemetry.addData("D", coeffs.d);
+//        telemetry.addData("F", coeffs.f);
+//        telemetry.update();
     }
 }
