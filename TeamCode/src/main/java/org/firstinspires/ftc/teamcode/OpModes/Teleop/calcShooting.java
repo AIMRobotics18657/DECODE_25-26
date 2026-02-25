@@ -36,16 +36,7 @@
 //
 //
 //
-//        double wheelRadius = 0.096;
-//        double omega = 600; // rad/s
-//        double v = omega * wheelRadius;
-//        double hoodRad = sa.solveTheta(3.175, v);
-//        double hoodDeg = sa.radToDeg(hoodRad);
-//        double minDeg = 30;
-//        double maxDeg = 65;
-//        double offsetDeg = 20; // tweak experimentally
-//        hoodDeg += offsetDeg;
-//        //double hoodPos =  1 - hoodDeg * 0.02085714285;
+//
 //        double hoodPos = (hoodDeg - minDeg) /(maxDeg - minDeg);
 //
 //        if (gamepad1.a) {
@@ -55,7 +46,7 @@
 //            launcher.launcherTwo.setVelocity(600, AngleUnit.RADIANS);
 //        } else if (gamepad1.y) {
 //            launcher.launcherOne.setPower(1);
-//            launcher.launcherTwo.setPower(1);//see if this velo on telemetry is above 4.2
+//            launcher.launcherTwo.setPower(1); // see if this velo on telemetry is above 4.2
 //        }
 //
 //        if (gamepad1.x) {

@@ -56,7 +56,8 @@ public class RobotV2 extends Mechanism {
 
             if (handler.CLOSE_LAUNCH){
                 //scorer.launcher.setVelo(300 * 0.01);
-                scorer.score(1.5,150,0);
+                scorer.score(scorer.lldist,200,5\
+                        , 0);//-0.254 );
             } else if (handler.FAR_LAUNCH){
                 scorer.launcher.setVelo(0);
             }

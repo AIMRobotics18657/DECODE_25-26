@@ -56,8 +56,8 @@ public class VeloLaunch extends Mechanism {
 
     @Override
     public void telemetry(Telemetry telemetry) {
-//        telemetry.addData("Velocity", launcherOne.getVelocity(AngleUnit.RADIANS));
-//        telemetry.addData("Encoder ticks", launcherOne.getCurrentPosition());
+      telemetry.addData("Velocity", launcherOne.getVelocity(AngleUnit.RADIANS));
+        telemetry.addData("Encoder ticks", launcherOne.getCurrentPosition());
 //
 //        PIDFCoefficients coeffs = launcherTwo.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER);
 //

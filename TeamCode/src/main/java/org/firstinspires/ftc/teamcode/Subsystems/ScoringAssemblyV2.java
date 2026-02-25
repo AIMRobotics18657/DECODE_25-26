@@ -12,7 +12,9 @@ public class ScoringAssemblyV2 extends Mechanism {
     public Intake intake = new Intake();
     public Hood hood = new Hood();
     public Gate gate = new Gate();
+    public Limelight limelight = new Limelight();
     public double hoodDeg;
+    double lldist;
 
     private double g = 9.8;
     private double deltaH = 1.0815; //meters
@@ -23,6 +25,7 @@ public class ScoringAssemblyV2 extends Mechanism {
         intake.init(hwMap);
         hood.init(hwMap);
         gate.init(hwMap);
+        limelight.init(hwMap);
     }
 
     @Override
@@ -31,19 +34,22 @@ public class ScoringAssemblyV2 extends Mechanism {
         intake.loop(aimPad);
         hood.loop(aimPad);
         gate.loop(aimPad);
+        limelight.loop(aimPad);
+        lldist = limelight.distance * 0.0254;
         //get dist
     }
 
     /**
      * main function used for scoring
      **/
-    public void score(double dist, double omega, double offsetDeg) {
+    public void score(double dist, double omega, double offsetDeg, double distOffset) {
 
         double scale = 2 * Math.PI / 628;
         double gearRatio = 14/10;
-        double launcherOmegaScaled = omega * scale ;
+        double launcherOmegaScaled = omega * scale;
         double hoodOmegaScaled = omega * gearRatio;
-        hood.hood.setPosition(hoodDegrees(dist, hoodOmegaScaled, offsetDeg)); //TODO does this get the scale?\
+        double offsetDist = dist + distOffset;
+        hood.hood.setPosition(hoodDegrees(offsetDist, hoodOmegaScaled, offsetDeg)); //TODO does this get the scale?\
         launcher.setVelo(launcherOmegaScaled);
 
         //TODO add thing for gate to sync with the hood and launcher
@@ -55,11 +61,13 @@ public class ScoringAssemblyV2 extends Mechanism {
 
         double hoodRad = solveTheta(dist, v);
         hoodDeg = radToDeg(hoodRad);
-        double minDeg = 17;
-        double maxDeg = 56;
+        double minDeg = 32;//17;
+        double maxDeg = 72;//56;
         hoodDeg += offsetDeg;
+        //double complementAngle = 90 - hoodDeg;
 
-        double hoodPos = (hoodDeg - minDeg) /(maxDeg - minDeg);
+
+        double hoodPos = (hoodDeg - minDeg) /(maxDeg - minDeg); //TODO make it so we can never get illegal servo exception
 
         return hoodPos;
     }
@@ -83,5 +91,6 @@ public class ScoringAssemblyV2 extends Mechanism {
         launcher.telemetry(telemetry);
         intake.telemetry(telemetry);
         hood.telemetry(telemetry);
+        limelight.telemetry(telemetry);
     }
 }
