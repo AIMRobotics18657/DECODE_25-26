@@ -19,6 +19,15 @@ public class ScoringAssemblyV2 extends Mechanism {
     private double g = 9.8;
     private double deltaH = 1.0815; //meters
 
+    public enum distancePhase {
+        ONE,
+        TWO,
+        THREE,
+        FAR,
+        NA;
+    }
+    public distancePhase distPhase = distancePhase.NA;
+
     @Override
     public void init(HardwareMap hwMap) {
         launcher.init(hwMap);
@@ -35,6 +44,22 @@ public class ScoringAssemblyV2 extends Mechanism {
         hood.loop(aimPad);
         gate.loop(aimPad);
         limelight.loop(aimPad);
+
+        //TODO fix inches for borders
+        if (limelight.llResult.isValid()) {
+            if (limelight.distance <= 55) {
+                distPhase = distancePhase.ONE;
+            } else if (limelight.distance > 55 && limelight.distance <= 70) {
+                distPhase = distancePhase.TWO;
+            } else if (limelight.distance > 72 && limelight.distance <= 82) {
+                distPhase = distancePhase.THREE;
+            } else if (limelight.distance > 82) {
+                distPhase = distancePhase.FAR;
+            }
+        } else {
+            distPhase = distancePhase.NA;
+        }
+
         lldist = limelight.distance * 0.0254;
         //get dist
     }
@@ -42,14 +67,15 @@ public class ScoringAssemblyV2 extends Mechanism {
     /**
      * main function used for scoring
      **/
-    public void score(double dist, double omega, double offsetDeg, double distOffset) {
+    public void score(double dist, double omega, double offsetDeg, double distOffset, double omegaOffset) {
 
         double scale = 2 * Math.PI / 628;
         double gearRatio = 14/10;
         double launcherOmegaScaled = omega * scale;
         double hoodOmegaScaled = omega * gearRatio;
         double offsetDist = dist + distOffset;
-        hood.hood.setPosition(hoodDegrees(offsetDist, hoodOmegaScaled, offsetDeg)); //TODO does this get the scale?\
+        double offsetOmega = hoodOmegaScaled - omegaOffset;
+        hood.hood.setPosition(hoodDegrees(offsetDist, offsetOmega, offsetDeg)); //TODO does this get the scale?\
         launcher.setVelo(launcherOmegaScaled);
 
         //TODO add thing for gate to sync with the hood and launcher
@@ -88,6 +114,7 @@ public class ScoringAssemblyV2 extends Mechanism {
     @Override
     public void telemetry(Telemetry telemetry) {
         telemetry.addData("hood angle", hoodDeg);
+        telemetry.addData("distance phase", distPhase);
         launcher.telemetry(telemetry);
         intake.telemetry(telemetry);
         hood.telemetry(telemetry);

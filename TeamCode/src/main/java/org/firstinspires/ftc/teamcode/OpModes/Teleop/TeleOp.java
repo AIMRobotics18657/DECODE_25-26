@@ -40,7 +40,7 @@ public class TeleOp extends OpMode {
         telemetry.addData("launcher power", robot.scorer.launcher.launcher.getPower());
          */
         robot.telemetry(telemetry);
-        telemetry.addData("heading", robot.db.drive.localizer.getPose().heading);
+        //telemetry.addData("heading", robot.db.drive.localizer.getPose().heading);
         telemetry.update();
     }
 

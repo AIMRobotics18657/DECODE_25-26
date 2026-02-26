@@ -16,8 +16,7 @@ public class Hood extends Mechanism {
     @Override
     public void init(HardwareMap hwMap) {
         hood = hwMap.get(Servo.class, ConfigInfo.hood.getDeviceName());
-        //hood.scaleRange(0, 0.53);
-        hood.scaleRange(0, .53);
+        hood.scaleRange(0, 0.53);
         hood.setPosition(0);
     }
 
@@ -28,7 +27,6 @@ public class Hood extends Mechanism {
 
     @Override
     public void telemetry(Telemetry telemetry){
-        telemetry.addData("Hood Position", hood.getPosition());
-        telemetry.addData("hood deg", hood.getPosition() * 0.02085714285);
+        telemetry.addData("Hood Position", hood.getPosition());//TODO fix this so it displays the degrees
     }
 }

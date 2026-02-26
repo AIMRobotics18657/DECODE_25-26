@@ -54,11 +54,27 @@ public class RobotV2 extends Mechanism {
                 scorer.intake.setMode(Intake.IntakeMode.OFF);
             }
 
-            if (handler.CLOSE_LAUNCH){
-                //scorer.launcher.setVelo(300 * 0.01);
-                scorer.score(scorer.lldist,200,5\
-                        , 0);//-0.254 );
-            } else if (handler.FAR_LAUNCH){
+            //if (handler.CLOSE_LAUNCH){
+                //scorer.launcher.setVelo(300 * 0.01); // dist is normally scorer.lldist
+                //scorer.score(scorer.lldist,300,3, 0., 0);//-0.254 );
+                //scorer.launcher.setVelo(235 * 2 * Math.PI / 628);
+                //scorer.hood.hood.setPosition(32-32/72-32);
+            //} else if (handler.FAR_LAUNCH){
+                //scorer.launcher.setVelo(0);
+            //}
+
+            if (handler.CLOSE_LAUNCH) {
+                if (scorer.distPhase == ScoringAssemblyV2.distancePhase.ONE) {
+                    scorer.score(scorer.lldist, 165, 3, 0, 15);
+                } else if (scorer.distPhase == ScoringAssemblyV2.distancePhase.TWO) {
+                    scorer.score(scorer.lldist, 190, 0, 0, -10);
+                } else if (scorer.distPhase == ScoringAssemblyV2.distancePhase.THREE) {
+                    scorer.score(scorer.lldist, 200, 3, 0, 0);
+                } else if (scorer.distPhase == ScoringAssemblyV2.distancePhase.FAR) {
+                    scorer.launcher.setVelo(235 * 2 * Math.PI / 628);
+                    scorer.hood.hood.setPosition(32-32/72-32);
+                }
+            } else if (handler.FAR_LAUNCH) {
                 scorer.launcher.setVelo(0);
             }
 
@@ -113,7 +129,6 @@ public class RobotV2 extends Mechanism {
     @Override
     public void telemetry(Telemetry telemetry) {
         scorer.telemetry(telemetry);
-        scorer.hood.hood.getPosition();
         //db.telemetry(telemetry);
         telemetry.addData("rr pose", rrPose);
     }

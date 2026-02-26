@@ -56,23 +56,25 @@ public class Limelight extends Mechanism {
 
 
         telemetry.addData("LL Null?", llResult == null);
+        telemetry.addData("LL Valid?", llResult.isValid());
 
         if (llResult != null) {
-            telemetry.addData("LL Valid?", llResult.isValid());
-
-            Pose3D botpose = llResult.getBotpose_MT2();
-            telemetry.addData("MT2 Null?", botpose == null);
-
+//            telemetry.addData("LL Valid?", llResult.isValid());
+//
+//            Pose3D botpose = llResult.getBotpose_MT2();
+//            telemetry.addData("MT2 Null?", botpose == null);
+//
             telemetry.addData("tgtx", llResult.getTx());
-            telemetry.addData("tgta", llResult.getTa());
-
-            if (botpose != null) {
-                telemetry.addData("Botpose", botpose.toString());
-            }
+//            telemetry.addData("tgta", llResult.getTa());
+//
+//            if (botpose != null) {
+//                telemetry.addData("Botpose", botpose.toString());
+//            }
         }
 
+
         telemetry.addData("calculated dist", distance);
-        telemetry.update();
+        //telemetry.update();
     }
 }
 

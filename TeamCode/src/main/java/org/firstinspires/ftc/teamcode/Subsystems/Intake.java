@@ -30,8 +30,8 @@ public class Intake extends Mechanism {
     @Override
     public void init(HardwareMap hwMap) {
         intake = hwMap.get(DcMotorEx.class, ConfigInfo.intake.getDeviceName());
-        intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        intake.setDirection(DcMotorSimple.Direction.REVERSE);
+        intake.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        intake.setDirection(DcMotorEx.Direction.REVERSE);
     }
 
     @Override
