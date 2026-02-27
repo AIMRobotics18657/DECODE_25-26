@@ -1,9 +1,12 @@
 package com.example.meepmeep;
 
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.Vector2d;
 import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
+
+import java.util.Vector;
 
 public class MeepsRed {
     public static void main(String[] args) {
@@ -12,20 +15,18 @@ public class MeepsRed {
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
-                .setDimensions(15.216535,18)//ask for correct height
+                .setDimensions(16,18)//ask for correct height
                 .build();
 
 
-        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-6,7, Math.toRadians(135))) // starts with middle on launch line
-                .turnTo(Math.toRadians(150)) // shooting pose
-                .waitSeconds(3) // time to shoot
-
-                //pick up first three artifacts
+        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-55 + Math.sqrt(50),55 - Math.sqrt(50), Math.toRadians(135))) // starts with middle on launch line
+                .strafeTo(new Vector2d(0, 0))
+                        .waitSeconds(3)
                 .setTangent(90)
                 .splineToLinearHeading(new Pose2d(-11.5, 25, Math.toRadians(90)), Math.toRadians(90))
                 .splineToLinearHeading(new Pose2d(-11.5, 53, Math.toRadians(90)), Math.toRadians(90)) // push into wall
                         .setTangent(Math.toRadians(270))
-                .splineToLinearHeading(new Pose2d(-6, 7, Math.toRadians(150)), Math.toRadians(270)) // go to shooting
+                .splineToLinearHeading(new Pose2d(0, 0, Math.toRadians(135)), Math.toRadians(270)) // go to shooting
                         .waitSeconds(3) // shoot
 
                 // next three artifacts
@@ -33,7 +34,7 @@ public class MeepsRed {
                 .splineToLinearHeading(new Pose2d(12, 25, Math.toRadians(90)), Math.toRadians(90)) // setup position
                 .splineToLinearHeading(new Pose2d(12, 53, Math.toRadians(90)), Math.toRadians(90)) // push into wall has to be 90
                         .setTangent(Math.toRadians(270))
-                .splineToLinearHeading(new Pose2d(-6, 7, Math.toRadians(150)), Math.toRadians(270)) // go to shooting
+                .splineToLinearHeading(new Pose2d(0, 0, Math.toRadians(135)), Math.toRadians(270)) // go to shooting
                         .waitSeconds(3)
 
                 //last three artifacts
@@ -43,7 +44,7 @@ public class MeepsRed {
                         .setTangent(Math.toRadians(90))
                 .splineToLinearHeading(new Pose2d(36, 53, Math.toRadians(90)), Math.toRadians(90))//collect
                         .setTangent(Math.toRadians(270))
-                .splineToLinearHeading(new Pose2d(-6, 7, Math.toRadians(150)), Math.toRadians(230))//to shooting
+                .splineToLinearHeading(new Pose2d(0, 0, Math.toRadians(135)), Math.toRadians(230))//to shooting
                         .waitSeconds(3)
                 //park
                         .setTangent(Math.toRadians(320))
@@ -52,7 +53,7 @@ public class MeepsRed {
 
 
 
-        meepMeep.setBackground(MeepMeep.Background.FIELD_DECODE_JUICE_LIGHT)
+        meepMeep.setBackground(MeepMeep.Background.FIELD_DECODE_JUICE_DARK)
                 .setDarkMode(true)
                 .setBackgroundAlpha(0.95f)
                 .addEntity(myBot)
