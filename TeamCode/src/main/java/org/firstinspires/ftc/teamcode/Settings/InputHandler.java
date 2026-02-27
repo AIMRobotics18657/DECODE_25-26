@@ -6,69 +6,59 @@ import com.aimrobotics.aimlib.gamepad.AIMPad;
 
 public class InputHandler {
 
-    //TODO add rumble
-
+    // GRANT CONTROLS
     public boolean INTAKE_IN = false;
     public boolean INTAKE_OUT = false;
-    public boolean GRANT_INTAKE_IN = false;
-    public boolean GRANT_INTAKE_OUT = false;
 
-    public boolean FAR_LAUNCH = false;
-    public boolean CLOSE_LAUNCH = false;
-    //public boolean CLOSE_LAUNCH = false;
-    public boolean REVERSE_LAUNCH = false;
-
-    public boolean HOOD_UP = false;
-    public boolean HOOD_DOWN = false;
-    public boolean FULL_UP = false;
-    public boolean FULL_DOWN = false;
-
-
-    //public boolean TOGGLE_RISE = false;
-
-    //public boolean TOGGLE_ENDGAME = false;
-
-    public boolean FULL_ON = false;
-    public boolean WIND_UP = false;
-    public boolean WIND_UP_FINISHED = false;
-    public boolean TOGGLE_DRIVE_SPEED = false;
     public boolean GATE_IN = false;
     public boolean GATE_OUT = false;
 
+    public boolean AUTO_ADJUST = false;
+    public boolean GRANT_LAUNCHER_OFF = false;
+
+    public boolean GRANT_HOOD_UP = false;
+    public boolean GRANT_HOOD_DOWN = false;
+
+    // JOLIE CONTROLS
+
+    public boolean FAR_LAUNCH = false;
+    public boolean CLOSE_LAUNCH = false;
+    public boolean REVERSE_LAUNCH = false;
+    public boolean JOLIE_LAUNCHER_OFF = false;
+
+
+    public boolean JOLIE_HOOD_UP = false;
+    public boolean JOLIE_HOOD_DOWN = false;
+
+    public boolean TOGGLE_DRIVE_SPEED = false;
+
+
     public void updateInputs(AIMPad aimPad1, AIMPad aimPad2) {
 
-        INTAKE_IN = aimPad2.isLeftTriggerHeld();
-        INTAKE_OUT = aimPad2.isLeftBumperHeld();
+        // GRANT CONTROLS
 
-        GRANT_INTAKE_IN = aimPad1.isLeftTriggerHeld();
-        GRANT_INTAKE_OUT = aimPad1.isLeftBumperHeld();
+        INTAKE_IN = aimPad1.isLeftTriggerHeld();
+        INTAKE_OUT = aimPad1.isLeftBumperHeld();
 
+        GATE_IN = aimPad1.isRightTriggerHeld();
+        GATE_OUT = aimPad1.isRightBumperHeld();
 
-        CLOSE_LAUNCH = aimPad1.isXPressed();//aimPad1.getRightTrigger() > .1;//aimPad1.isRightTriggerHeld();
-        FAR_LAUNCH = aimPad1.isLeftBumperPressed();//aimPad1.isRightTriggerHeld();
-        REVERSE_LAUNCH = //aimPad1.isRightBumperHeld();
+        AUTO_ADJUST = aimPad1.isXPressed();
+        GRANT_LAUNCHER_OFF = aimPad1.isYPressed();
 
-        HOOD_UP = aimPad1.isDPadUpPressed();
-        HOOD_DOWN = aimPad1.isDPadDownPressed();
-        FULL_UP = aimPad1.isDPadRightPressed();
-        FULL_DOWN = aimPad1.isDPadLeftPressed();
+        GRANT_HOOD_UP = aimPad1.isDPadUpPressed();
+        GRANT_HOOD_DOWN = aimPad1.isDPadDownPressed();
 
-        GATE_IN = aimPad1.isAHeld();
-        GATE_OUT = aimPad1.isBHeld();
+        // JOLIE CONTROLS
 
-        //TOGGLE_ENDGAME = aimPad1.getRightTrigger() > 0.1;
+        CLOSE_LAUNCH = aimPad2.isXPressed();
+        FAR_LAUNCH = aimPad2.isBPressed();
 
-        //TOGGLE_RISE = aimPad1.isAPressed();
+        REVERSE_LAUNCH = aimPad2.isRightBumperHeld();
+        JOLIE_LAUNCHER_OFF = aimPad2.isLeftBumperHeld();
 
-        //FULL_ON = aimPad1.isAHeld();
-//        WIND_UP = aimPad1.isAPressed();
-//        WIND_UP_FINISHED = aimPad1.isBPressed();
-//
-//        TOGGLE_DRIVE_SPEED = aimPad1.isYPressed();
-//
-//        TOGGLE_GATE = aimPad2.isXPressed();
-
-
+        JOLIE_HOOD_UP = aimPad2.isDPadUpPressed();
+        JOLIE_HOOD_DOWN= aimPad2.isDPadDownPressed();
 
     }
 }

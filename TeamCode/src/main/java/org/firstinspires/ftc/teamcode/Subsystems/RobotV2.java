@@ -4,6 +4,7 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.aimrobotics.aimlib.gamepad.AIMPad;
 import com.aimrobotics.aimlib.util.Mechanism;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.PinpointLocalizer;
@@ -21,6 +22,8 @@ public class RobotV2 extends Mechanism {
     public boolean isAuto;
 
     public Pose2d rrPose;
+    public ElapsedTime timer = new ElapsedTime();
+    public boolean shootIsDone = false;
 
 
     public RobotV2(Pose2d startingPose, boolean isAuto) {
@@ -46,24 +49,17 @@ public class RobotV2 extends Mechanism {
             db.loop(aimPad1, false);
             handler.updateInputs(aimPad1, aimPad2);
 
-            if (handler.INTAKE_IN || handler.GRANT_INTAKE_IN) {
+            // GRANT CONTROLS
+
+            if (handler.INTAKE_IN) {
                 scorer.intake.setMode(Intake.IntakeMode.IN);
-            } else if (handler.INTAKE_OUT || handler.GRANT_INTAKE_OUT) {
+            } else if (handler.INTAKE_OUT) {
                 scorer.intake.setMode(Intake.IntakeMode.OUT);
             } else {
                 scorer.intake.setMode(Intake.IntakeMode.OFF);
             }
 
-            //if (handler.CLOSE_LAUNCH){
-                //scorer.launcher.setVelo(300 * 0.01); // dist is normally scorer.lldist
-                //scorer.score(scorer.lldist,300,3, 0., 0);//-0.254 );
-                //scorer.launcher.setVelo(235 * 2 * Math.PI / 628);
-                //scorer.hood.hood.setPosition(32-32/72-32);
-            //} else if (handler.FAR_LAUNCH){
-                //scorer.launcher.setVelo(0);
-            //}
-
-            if (handler.CLOSE_LAUNCH) {
+            if (handler.AUTO_ADJUST) {
                 if (scorer.distPhase == ScoringAssemblyV2.distancePhase.ONE) {
                     scorer.score(scorer.lldist, 165, 3, 0, 15);
                 } else if (scorer.distPhase == ScoringAssemblyV2.distancePhase.TWO) {
@@ -74,41 +70,41 @@ public class RobotV2 extends Mechanism {
                     scorer.launcher.setVelo(235 * 2 * Math.PI / 628);
                     scorer.hood.hood.setPosition(32-32/72-32);
                 }
-            } else if (handler.FAR_LAUNCH) {
+            } else if (handler.GRANT_LAUNCHER_OFF) {
                 scorer.launcher.setVelo(0);
             }
 
             if (handler.GATE_IN) {
                 scorer.gate.setMode(Gate.GateMode.IN);
             } else if (handler.GATE_OUT) {
-
                 scorer.gate.setMode(Gate.GateMode.OUT);
             } else {
                 scorer.gate.setMode(Gate.GateMode.OFF);
             }
 
-            if (handler.HOOD_DOWN) {
-                scorer.hood.hood.setPosition(scorer.hood.hood.getPosition() + .01);
-            } else if (handler.HOOD_UP) {
-                scorer.hood.hood.setPosition(scorer.hood.hood.getPosition() - .01);
+            if (handler.GRANT_HOOD_DOWN) {
+                scorer.hood.hood.setPosition(((scorer.hood.hood.getPosition() + 1) / 40) + 32);
+            } else if (handler.GRANT_HOOD_UP) {
+                scorer.hood.hood.setPosition(((scorer.hood.hood.getPosition() - 1) / 40) + 32);
             }
 
-//            if (handler.FAR_LAUNCH) {
-//                scorer.launcher.setTargetPower(Launcher.launchPower.FAR);
-//            } else if (handler.REVERSE_LAUNCH) {
-//                scorer.launcher.setTargetPower(Launcher.launchPower.REVERSE);
-//            } else if (handler.CLOSE_LAUNCH) {
-//                scorer.launcher.setTargetPower(Launcher.launchPower.CLOSE);
-//            } else {
-//                scorer.launcher.setTargetPower(Launcher.launchPower.OFF);
-//            }
-//0-79
-//            if (handler.HOOD_UP) {
-//                //double currentPos = scorer.hood.hood.getPosition();
-//                //scorer.hood.hood.setPosition(currentPos + 0.01);
-//            } else if (handler.HOOD_DOWN) {
-//                //double currentPos = scorer.hood.hood.getPosition();
-//                //scorer.hood.hood.setPosition(currentPos - 0.01);
+            // JOLIE CONTROLS
+
+            if (handler.CLOSE_LAUNCH) {
+                scorer.score(70, 190, 0, 0, -10);
+            }  else if (handler.FAR_LAUNCH) {
+                scorer.launcher.setVelo(235 * 2 * Math.PI / 628);
+                scorer.hood.hood.setPosition(32-32/72-32);
+            } else if (handler.JOLIE_LAUNCHER_OFF){
+                scorer.launcher.setVelo(0);
+            }
+
+            if (handler.GRANT_HOOD_DOWN) {
+                scorer.hood.hood.setPosition(((scorer.hood.hood.getPosition() + 1) / 40) + 32);
+            } else if (handler.GRANT_HOOD_UP) {
+                scorer.hood.hood.setPosition(((scorer.hood.hood.getPosition() - 1) / 40) + 32);
+            }
+
 //            } else if (handler.FULL_DOWN) {
 //                //scorer.hood.hood.setPosition(0.73);
 //            } else if (handler.FULL_UP) {
@@ -123,6 +119,25 @@ public class RobotV2 extends Mechanism {
 //                }
 //            }
         }
+
+    }
+
+    public void setShoot() {
+        shootIsDone = false;
+        timer.reset();
+    }
+    public void shootThree () {
+        if (timer.milliseconds() <= 500) {
+            scorer.score(scorer.lldist, 190, 10, 0, -10);
+        } else if (timer.milliseconds() > 1000 && timer.milliseconds() <= 3000) {
+            scorer.gate.setMode(Gate.GateMode.IN);
+            scorer.intake.setMode(Intake.IntakeMode.IN);
+        } else if (timer.milliseconds() > 3000) {
+            scorer.launcher.setVelo(0);
+            scorer.gate.setMode(Gate.GateMode.OFF);
+            shootIsDone = true;
+
+    }
 
     }
 

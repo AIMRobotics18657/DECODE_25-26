@@ -45,7 +45,7 @@ public class ScoringAssemblyV2 extends Mechanism {
         gate.loop(aimPad);
         limelight.loop(aimPad);
 
-        //TODO fix inches for borders
+
         if (limelight.llResult.isValid()) {
             if (limelight.distance <= 55) {
                 distPhase = distancePhase.ONE;
@@ -61,7 +61,6 @@ public class ScoringAssemblyV2 extends Mechanism {
         }
 
         lldist = limelight.distance * 0.0254;
-        //get dist
     }
 
     /**
@@ -75,7 +74,7 @@ public class ScoringAssemblyV2 extends Mechanism {
         double hoodOmegaScaled = omega * gearRatio;
         double offsetDist = dist + distOffset;
         double offsetOmega = hoodOmegaScaled - omegaOffset;
-        hood.hood.setPosition(hoodDegrees(offsetDist, offsetOmega, offsetDeg)); //TODO does this get the scale?\
+        hood.hood.setPosition(hoodDegrees(offsetDist, offsetOmega, offsetDeg));
         launcher.setVelo(launcherOmegaScaled);
 
         //TODO add thing for gate to sync with the hood and launcher
@@ -87,10 +86,9 @@ public class ScoringAssemblyV2 extends Mechanism {
 
         double hoodRad = solveTheta(dist, v);
         hoodDeg = radToDeg(hoodRad);
-        double minDeg = 32;//17;
-        double maxDeg = 72;//56;
+        double minDeg = 32;
+        double maxDeg = 72;
         hoodDeg += offsetDeg;
-        //double complementAngle = 90 - hoodDeg;
 
 
         double hoodPos = (hoodDeg - minDeg) /(maxDeg - minDeg); //TODO make it so we can never get illegal servo exception
@@ -114,6 +112,7 @@ public class ScoringAssemblyV2 extends Mechanism {
     @Override
     public void telemetry(Telemetry telemetry) {
         telemetry.addData("hood angle", hoodDeg);
+        telemetry.addData("current hood position", hood.hood.getPosition() /(72-32) + 32);
         telemetry.addData("distance phase", distPhase);
         launcher.telemetry(telemetry);
         intake.telemetry(telemetry);
