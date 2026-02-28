@@ -83,9 +83,9 @@ public class RobotV2 extends Mechanism {
             }
 
             if (handler.GRANT_HOOD_DOWN) {
-                scorer.hood.hood.setPosition(((scorer.hood.hood.getPosition() + 1) / 40) + 32);
+                scorer.hood.hood.setPosition(scorer.hood.hood.getPosition() + 0.1);
             } else if (handler.GRANT_HOOD_UP) {
-                scorer.hood.hood.setPosition(((scorer.hood.hood.getPosition() - 1) / 40) + 32);
+                scorer.hood.hood.setPosition(scorer.hood.hood.getPosition() - 0.1);
             }
 
             // JOLIE CONTROLS
@@ -100,9 +100,9 @@ public class RobotV2 extends Mechanism {
             }
 
             if (handler.GRANT_HOOD_DOWN) {
-                scorer.hood.hood.setPosition(((scorer.hood.hood.getPosition() + 1) / 40) + 32);
+                scorer.hood.hood.setPosition(scorer.hood.hood.getPosition() + 0.1); //TODO make this so it moves one degree
             } else if (handler.GRANT_HOOD_UP) {
-                scorer.hood.hood.setPosition(((scorer.hood.hood.getPosition() - 1) / 40) + 32);
+                scorer.hood.hood.setPosition(scorer.hood.hood.getPosition() - 0.1);
             }
 
 //            } else if (handler.FULL_DOWN) {

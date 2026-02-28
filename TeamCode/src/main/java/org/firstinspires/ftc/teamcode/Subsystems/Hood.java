@@ -17,7 +17,7 @@ public class Hood extends Mechanism {
     public void init(HardwareMap hwMap) {
         hood = hwMap.get(Servo.class, ConfigInfo.hood.getDeviceName());
         hood.scaleRange(0, 0.53);
-        hood.setPosition(0);
+        //hood.setPosition(0);
     }
 
     @Override

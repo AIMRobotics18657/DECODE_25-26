@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.OpModes.Teleop;
 
 import com.aimrobotics.aimlib.gamepad.AIMPad;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -11,6 +12,7 @@ import org.firstinspires.ftc.teamcode.Subsystems.Intake;
 import org.firstinspires.ftc.teamcode.Subsystems.VeloLaunch;
 
 @TeleOp (name="veloShoot")
+@Disabled
 public class VeloShoot extends OpMode {
 
     VeloLaunch vl = new VeloLaunch();

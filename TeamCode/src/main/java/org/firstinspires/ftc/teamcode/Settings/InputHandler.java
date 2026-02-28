@@ -49,6 +49,8 @@ public class InputHandler {
         GRANT_HOOD_UP = aimPad1.isDPadUpPressed();
         GRANT_HOOD_DOWN = aimPad1.isDPadDownPressed();
 
+        //TODO change to is held?
+
         // JOLIE CONTROLS
 
         CLOSE_LAUNCH = aimPad2.isXPressed();
