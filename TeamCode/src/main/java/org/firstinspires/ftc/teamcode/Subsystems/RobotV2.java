@@ -128,7 +128,12 @@ public class RobotV2 extends Mechanism {
     }
     public void shootThree () {
         if (timer.milliseconds() <= 100) {
+            if (scorer.limelight.llResult.isValid()) {
             scorer.score(scorer.lldist, 190, 10, 0, -10);
+            } else {
+                scorer.score(65 * 0.0254, 190, 10, 0, -10);
+            }
+
         } else if (timer.milliseconds() > 200 && timer.milliseconds() <= 3000) {
             scorer.gate.setMode(Gate.GateMode.IN);
             scorer.intake.setMode(Intake.IntakeMode.IN);

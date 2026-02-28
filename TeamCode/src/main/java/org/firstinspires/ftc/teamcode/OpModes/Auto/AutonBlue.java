@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.Subsystems.RobotV2;
 
 @Autonomous (name="blue auto")
 public class AutonBlue extends LinearOpMode {
-    RobotV2 robot = new RobotV2(new Pose2d(-55 + Math.sqrt(50),55 - Math.sqrt(50), Math.toRadians(135)), true);
+    RobotV2 robot = new RobotV2(new Pose2d(-55 + Math.sqrt(50),-55 + Math.sqrt(50), Math.toRadians(-135)), true);
 
     boolean isDone = false;
 
@@ -27,40 +27,40 @@ public class AutonBlue extends LinearOpMode {
         robot.init(hardwareMap);
 
         Action initialShoot = robot.db.drive.actionBuilder(new Pose2d(-55 + Math.sqrt(50),-55 + Math.sqrt(50), Math.toRadians(-135)))
-                .strafeTo(new Vector2d(10, 10))
+                .strafeTo(new Vector2d(-10, -10))
                 .waitSeconds(0.1)
                 .setTangent(Math.toRadians(-90))
                 .build();
 
-        Action getFirstBalls = robot.db.drive.actionBuilder(new Pose2d(10, 10, Math.toRadians(45)))
-                .splineToLinearHeading(new Pose2d(-11.5, -25, Math.toRadians(-90)), Math.toRadians(-90))
-                .splineToLinearHeading(new Pose2d(-11.5, -53, Math.toRadians(-90)), Math.toRadians(-90)) // push into wall
+        Action getFirstBalls = robot.db.drive.actionBuilder(new Pose2d(-10, -10, Math.toRadians(-45)))
+                .splineToLinearHeading(new Pose2d(-7.5, -25, Math.toRadians(-100)), Math.toRadians(-90))
+                .splineToLinearHeading(new Pose2d(-7.5, -60, Math.toRadians(-90)), Math.toRadians(-90)) // push into wall
                 .setTangent(Math.toRadians(90))
-                .splineToLinearHeading(new Pose2d(10, 10, Math.toRadians(-135)), Math.toRadians(90)) // go to shooting
+                .splineToLinearHeading(new Pose2d(-10, -10, Math.toRadians(-135)), Math.toRadians(90)) // go to shooting
                 .waitSeconds(0.1) // shoot
                 .build();
 
-        Action getSecondBalls = robot.db.drive.actionBuilder(new Pose2d(10, 10, Math.toRadians(45)))
+        Action getSecondBalls = robot.db.drive.actionBuilder(new Pose2d(-10, -10, Math.toRadians(45)))
                 .setTangent(Math.toRadians(-45))
-                .splineToLinearHeading(new Pose2d(12, -25, Math.toRadians(-90)), Math.toRadians(-90)) // setup position
-                .splineToLinearHeading(new Pose2d(12, -53, Math.toRadians(-90)), Math.toRadians(-90)) // push into wall has to be 90
+                .splineToLinearHeading(new Pose2d(15, -25, Math.toRadians(-90)), Math.toRadians(-90)) // setup position
+                .splineToLinearHeading(new Pose2d(15, -65, Math.toRadians(-90)), Math.toRadians(-90)) // push into wall has to be 90
                 .setTangent(Math.toRadians(90))
-                .splineToLinearHeading(new Pose2d(10, 10, Math.toRadians(-135)), Math.toRadians(90)) // go to shooting
+                .splineToLinearHeading(new Pose2d(-10, -10, Math.toRadians(-135)), Math.toRadians(90)) // go to shooting
                 .waitSeconds(0.1)
                 .build();
 
-        Action getThirdBalls = robot.db.drive.actionBuilder(new Pose2d(10, 10, Math.toRadians(45)))
+        Action getThirdBalls = robot.db.drive.actionBuilder(new Pose2d(-10, -10, Math.toRadians(45)))
                 .setTangent(Math.toRadians(-10))
-                .splineToLinearHeading(new Pose2d(36, -25, Math.toRadians(-90)), Math.toRadians(-15))//setup(might be hard to stop on a dime here)
+                .splineToLinearHeading(new Pose2d(39, -25, Math.toRadians(-90)), Math.toRadians(-15))//setup(might be hard to stop on a dime here)
                 .setTangent(Math.toRadians(-90))
                 .setTangent(Math.toRadians(-90))
-                .splineToLinearHeading(new Pose2d(36, -53, Math.toRadians(-90)), Math.toRadians(-90))//collect
+                .splineToLinearHeading(new Pose2d(39, -65, Math.toRadians(-90)), Math.toRadians(-90))//collect
                 .setTangent(Math.toRadians(90))
-                .splineToLinearHeading(new Pose2d(10, 10, Math.toRadians(-135)), Math.toRadians(-230))//to shooting
-                .waitSeconds(3)
+                .splineToLinearHeading(new Pose2d(-10, -10, Math.toRadians(-135)), Math.toRadians(-230))//to shooting
+                .waitSeconds(0.1)
                 .build();
 
-        Action park = robot.db.drive.actionBuilder(new Pose2d(10, 10, Math.toRadians(45)))
+        Action park = robot.db.drive.actionBuilder(new Pose2d(-10, -10, Math.toRadians(45)))
                 .setTangent(Math.toRadians(-320))
                 .splineToLinearHeading(new Pose2d(38, 33, Math.toRadians(-90)), Math.toRadians(-330))
                 .build();
@@ -119,6 +119,7 @@ public class AutonBlue extends LinearOpMode {
                             )
                     )
             );
+
         }
     }
 }
