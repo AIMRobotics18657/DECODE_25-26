@@ -20,13 +20,13 @@ public class MeepsRed {
 
 
         myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-55 + Math.sqrt(50),55 - Math.sqrt(50), Math.toRadians(135))) // starts with middle on launch line
-                .strafeTo(new Vector2d(0, 0))
+                .strafeTo(new Vector2d(-10, 10))
                         .waitSeconds(3)
                 .setTangent(90)
                 .splineToLinearHeading(new Pose2d(-11.5, 25, Math.toRadians(90)), Math.toRadians(90))
                 .splineToLinearHeading(new Pose2d(-11.5, 53, Math.toRadians(90)), Math.toRadians(90)) // push into wall
                         .setTangent(Math.toRadians(270))
-                .splineToLinearHeading(new Pose2d(0, 0, Math.toRadians(135)), Math.toRadians(270)) // go to shooting
+                .splineToLinearHeading(new Pose2d(-10, 10, Math.toRadians(135)), Math.toRadians(270)) // go to shooting
                         .waitSeconds(3) // shoot
 
                 // next three artifacts
@@ -34,7 +34,7 @@ public class MeepsRed {
                 .splineToLinearHeading(new Pose2d(12, 25, Math.toRadians(90)), Math.toRadians(90)) // setup position
                 .splineToLinearHeading(new Pose2d(12, 53, Math.toRadians(90)), Math.toRadians(90)) // push into wall has to be 90
                         .setTangent(Math.toRadians(270))
-                .splineToLinearHeading(new Pose2d(0, 0, Math.toRadians(135)), Math.toRadians(270)) // go to shooting
+                .splineToLinearHeading(new Pose2d(-10, 10, Math.toRadians(90)), Math.toRadians(270)) // go to shooting
                         .waitSeconds(3)
 
                 //last three artifacts
@@ -44,7 +44,7 @@ public class MeepsRed {
                         .setTangent(Math.toRadians(90))
                 .splineToLinearHeading(new Pose2d(36, 53, Math.toRadians(90)), Math.toRadians(90))//collect
                         .setTangent(Math.toRadians(270))
-                .splineToLinearHeading(new Pose2d(0, 0, Math.toRadians(135)), Math.toRadians(230))//to shooting
+                .splineToLinearHeading(new Pose2d(-10, 10, Math.toRadians(135)), Math.toRadians(230))//to shooting
                         .waitSeconds(3)
                 //park
                         .setTangent(Math.toRadians(320))

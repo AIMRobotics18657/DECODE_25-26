@@ -27,40 +27,40 @@ public class AutonRed extends LinearOpMode {
         robot.init(hardwareMap);
 
         Action initialShoot = robot.db.drive.actionBuilder(new Pose2d(-55 + Math.sqrt(50),55 - Math.sqrt(50), Math.toRadians(135)))
-                .strafeTo(new Vector2d(0, 0))
-                .waitSeconds(3)
+                .strafeTo(new Vector2d(-10, 10))
+                .waitSeconds(0.1)
                 .setTangent(Math.toRadians(90))
                 .build();
 
-        Action getFirstBalls = robot.db.drive.actionBuilder(new Pose2d(0, 0, Math.toRadians(135)))
-                .splineToLinearHeading(new Pose2d(-11.5, 25, Math.toRadians(90)), Math.toRadians(90))
-                .splineToLinearHeading(new Pose2d(-11.5, 53, Math.toRadians(90)), Math.toRadians(90))
+        Action getFirstBalls = robot.db.drive.actionBuilder(new Pose2d(-10, 10, Math.toRadians(135)))
+                .splineToLinearHeading(new Pose2d(-7.5, 25, Math.toRadians(90)), Math.toRadians(90))
+                .splineToLinearHeading(new Pose2d(-7.5, 53, Math.toRadians(90)), Math.toRadians(90))
                 .setTangent(Math.toRadians(270))
-                .splineToLinearHeading(new Pose2d(0, 0, Math.toRadians(135)), Math.toRadians(270))
-                .waitSeconds(3)
+                .splineToLinearHeading(new Pose2d(-10, 10, Math.toRadians(135)), Math.toRadians(270))
+                .waitSeconds(0.1)
                 .build();
 
-        Action getSecondBalls = robot.db.drive.actionBuilder(new Pose2d(0, 0, Math.toRadians(135)))
+        Action getSecondBalls = robot.db.drive.actionBuilder(new Pose2d(-10, 10, Math.toRadians(135)))
                 .setTangent(Math.toRadians(45))
-                .splineToLinearHeading(new Pose2d(12, 25, Math.toRadians(90)), Math.toRadians(90)) // setup position
-                .splineToLinearHeading(new Pose2d(12, 53, Math.toRadians(90)), Math.toRadians(90)) // push into wall has to be 90
+                .splineToLinearHeading(new Pose2d(15, 20, Math.toRadians(90)), Math.toRadians(90)) // setup position
+                .splineToLinearHeading(new Pose2d(15, 53, Math.toRadians(90)), Math.toRadians(90)) // push into wall has to be 90
                 .setTangent(Math.toRadians(270))
-                .splineToLinearHeading(new Pose2d(0, 0, Math.toRadians(135)), Math.toRadians(270)) // go to shooting
-                .waitSeconds(3)
+                .splineToLinearHeading(new Pose2d(-10, 10, Math.toRadians(135)), Math.toRadians(270)) // go to shooting
+                .waitSeconds(0.1)
                 .build();
 
-        Action getThirdBalls = robot.db.drive.actionBuilder(new Pose2d(0, 0, Math.toRadians(135)))
+        Action getThirdBalls = robot.db.drive.actionBuilder(new Pose2d(-10, 10, Math.toRadians(135)))
                 .setTangent(Math.toRadians(10))
-                .splineToLinearHeading(new Pose2d(36, 25, Math.toRadians(90)), Math.toRadians(15))//setup(might be hard to stop on a dime here)
+                .splineToLinearHeading(new Pose2d(40, 15, Math.toRadians(90)), Math.toRadians(15))//setup(might be hard to stop on a dime here)
                 .setTangent(Math.toRadians(90))
                 .setTangent(Math.toRadians(90))
-                .splineToLinearHeading(new Pose2d(36, 53, Math.toRadians(90)), Math.toRadians(90))//collect
+                .splineToLinearHeading(new Pose2d(40, 53, Math.toRadians(90)), Math.toRadians(90))//collect
                 .setTangent(Math.toRadians(270))
-                .splineToLinearHeading(new Pose2d(0, 0, Math.toRadians(135)), Math.toRadians(230))//to shooting
-                .waitSeconds(3)
+                .splineToLinearHeading(new Pose2d(-10, 10, Math.toRadians(135)), Math.toRadians(230))//to shooting
+                .waitSeconds(0.1)
                 .build();
 
-        Action park = robot.db.drive.actionBuilder(new Pose2d(0, 0, Math.toRadians(135)))
+        Action park = robot.db.drive.actionBuilder(new Pose2d(-10, 10, Math.toRadians(135)))
                 .setTangent(Math.toRadians(320))
                 .splineToLinearHeading(new Pose2d(38, -33, Math.toRadians(90)), Math.toRadians(330))
                 .build();
@@ -73,25 +73,22 @@ public class AutonRed extends LinearOpMode {
                     new ParallelAction(
                             (telemetryPacket) -> {
                                 robot.loop(new AIMPad(gamepad1), new AIMPad(gamepad2));
+                                robot.scorer.intake.setMode(Intake.IntakeMode.IN);
+                                robot.scorer.launcher.setVelo(190 * 2 * Math.PI / 628);
                                 return !isDone;
                             },
                             new SequentialAction(
                                     initialShoot,
                                     (telemetryPacket) -> {
-                                      robot.setShoot();
-                                      return false;
+                                        robot.setShoot();
+                                        return false;
                                     },
                                     (telemetryPacket) -> { // Shoot 3
                                         robot.shootThree();
                                         return !robot.shootIsDone;
                                     },
-                                    new ParallelAction(
-                                            getFirstBalls,
-                                            (telemetryPacket) -> {
-                                                robot.scorer.intake.setMode(Intake.IntakeMode.IN);
-                                                return false;
-                                            }
-                                    ),//TODO make all get balls into parallel actions
+                                    getFirstBalls,
+                                            //TODO make all get balls into parallel actions
                                     (telemetryPacket) -> {
                                         robot.setShoot();
                                         return false;
