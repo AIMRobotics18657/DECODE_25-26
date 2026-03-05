@@ -5,6 +5,8 @@ import com.aimrobotics.aimlib.util.Mechanism;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 public class ScoringAssemblyV2 extends Mechanism {
 
@@ -17,7 +19,9 @@ public class ScoringAssemblyV2 extends Mechanism {
     double lldist;
 
     private double g = 9.8;
-    private double deltaH = 1.0815; //meters
+    private double deltaH = 0.635; //meters
+    private double offsetHeight = 5 * 0.0254;
+
 
     public enum distancePhase {
         ONE,
@@ -37,7 +41,6 @@ public class ScoringAssemblyV2 extends Mechanism {
         limelight.init(hwMap);
     }
 
-    @Override
     public void loop(AIMPad aimPad) {
         launcher.loop(aimPad);
         intake.loop(aimPad);
@@ -46,7 +49,9 @@ public class ScoringAssemblyV2 extends Mechanism {
         limelight.loop(aimPad);
 
 
-        if (limelight.llResult.isValid()) {
+        if (limelight.llResult != null && limelight.llResult.isValid()) {
+            lldist = limelight.distance * 0.0254;
+
             if (limelight.distance <= 55) {
                 distPhase = distancePhase.ONE;
             } else if (limelight.distance > 55 && limelight.distance <= 70) {
@@ -60,7 +65,11 @@ public class ScoringAssemblyV2 extends Mechanism {
             distPhase = distancePhase.NA;
         }
 
-        lldist = limelight.distance * 0.0254;
+
+
+
+
+
     }
 
     /**
@@ -97,9 +106,9 @@ public class ScoringAssemblyV2 extends Mechanism {
     }
 
     private double solveTheta(double dist, double v) {
-        double thetaHigh = Math.atan((Math.pow(v, 2) + Math.sqrt(Math.pow(v, 4) - g * (g * Math.pow(dist, 2) + 2 * (deltaH) * Math.pow(v, 2)))) / (g * dist));
+        //double thetaHigh = Math.atan((Math.pow(v, 2) + Math.sqrt(Math.pow(v, 4) - g * (g * Math.pow(dist, 2) + 2 * (deltaH + offsetHeight) * Math.pow(v, 2)))) / (g * dist));
 
-        double thetaLow = Math.atan((Math.pow(v, 2) - Math.sqrt(Math.pow(v, 4) - g * (g * Math.pow(dist, 2) + 2 * (deltaH) * Math.pow(v, 2)))) / (g * dist));
+        double thetaLow = Math.atan((Math.pow(v, 2) - Math.sqrt(Math.pow(v, 4) - g * (g * Math.pow(dist, 2) + 2 * (deltaH + offsetHeight) * Math.pow(v, 2)))) / (g * dist));
 
 
         return thetaLow;
@@ -108,6 +117,7 @@ public class ScoringAssemblyV2 extends Mechanism {
     private double radToDeg (double theta) {
         return Math.toDegrees(theta);
     }
+
 
     @Override
     public void telemetry(Telemetry telemetry) {
@@ -118,5 +128,6 @@ public class ScoringAssemblyV2 extends Mechanism {
         intake.telemetry(telemetry);
         hood.telemetry(telemetry);
         limelight.telemetry(telemetry);
+
     }
 }

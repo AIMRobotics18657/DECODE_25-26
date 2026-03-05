@@ -4,12 +4,11 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.aimrobotics.aimlib.gamepad.AIMPad;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.firstinspires.ftc.teamcode.Settings.InputHandler;
 import org.firstinspires.ftc.teamcode.Subsystems.RobotV2;
 
 /// Figure out groups
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="TeleOp", group = "AAA_COMP")
-public class TeleOp extends OpMode {
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Red TeleOp", group = "AAA_COMP")
+public class TeleOpRed extends OpMode {
 
     AIMPad aimPad1;
     AIMPad aimPad2;

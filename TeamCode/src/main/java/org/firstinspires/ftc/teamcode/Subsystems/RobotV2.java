@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.PinpointLocalizer;
+import org.firstinspires.ftc.teamcode.R;
 import org.firstinspires.ftc.teamcode.Settings.InputHandler;
 
 
@@ -24,12 +25,29 @@ public class RobotV2 extends Mechanism {
     public Pose2d rrPose;
     public ElapsedTime timer = new ElapsedTime();
     public boolean shootIsDone = false;
+    public ElapsedTime poseTimer = new ElapsedTime();
+    public boolean isAutoAIM = false;
+
+    // Get pose from Limelight (field-relative!)
+    double visionX;        // inches
+    double visionY;        // inches
+    double visionHeading; // RADIANS
+
+    Pose2d visionPose = new Pose2d(visionX, visionY, visionHeading);
+
+    public enum localType {
+        ODO,
+        LIME;
+    }
+
+    public localType currentLocalType = localType.LIME;
 
 
     public RobotV2(Pose2d startingPose, boolean isAuto) {
         this.startingPose = startingPose;
         this.isAuto = isAuto;
         db = new Drivebase(startingPose);
+
     }
 
     @Override
@@ -44,9 +62,36 @@ public class RobotV2 extends Mechanism {
         db.drive.updatePoseEstimate();
 
         rrPose = db.drive.localizer.getPose();
+        double currentHeading = Math.toDegrees(rrPose.heading.toDouble());
+
+//        if (scorer.limelight.llResult != null && scorer.limelight.llResult.isValid()) {
+//            db.drive.localizer.setPose(new Pose2d(scorer.limelight.llResult.getBotpose().getPosition().x * 0.0254, scorer.limelight.llResult.getBotpose().getPosition().y * 0.0254, Math.toDegrees(rrPose.heading.toDouble())));
+////TODO meters or in???
+//                       }
+
+
+        if (scorer.limelight.llResult != null && scorer.limelight.llResult.isValid()) {
+
+            double xMeters = scorer.limelight.llResult.getBotpose_MT2().getPosition().x;
+
+            double yMeters = scorer.limelight.llResult.getBotpose_MT2().getPosition().y;
+
+            double yawDeg = scorer.limelight.llResult.getBotpose_MT2().getOrientation().getYaw();
+
+            double xInches = xMeters / 0.0254;
+            double yInches = yMeters / 0.0254;
+            double headingRad = Math.toRadians(yawDeg);
+
+            visionPose = new Pose2d(xInches, yInches, headingRad);
+
+
+            //db.drive.localizer.setPose(visionPose);
+        }
 
         if (!isAuto) {
             db.loop(aimPad1, false);
+
+
             handler.updateInputs(aimPad1, aimPad2);
 
             // GRANT CONTROLS
@@ -59,13 +104,39 @@ public class RobotV2 extends Mechanism {
                 scorer.intake.setMode(Intake.IntakeMode.OFF);
             }
 
-            if (handler.AUTO_ADJUST) {
+//            if (handler.AUTO_ADJUST) {
+//                if (scorer.distPhase == ScoringAssemblyV2.distancePhase.ONE) {
+//                    scorer.score(scorer.lldist, 165, 3, 0, 15);
+//                } else if (scorer.distPhase == ScoringAssemblyV2.distancePhase.TWO) {
+//                    scorer.score(scorer.lldist, 190, 0, 0, -10);
+//                } else if (scorer.distPhase == ScoringAssemblyV2.distancePhase.THREE) {
+//                    scorer.score(scorer.lldist, 200, 3, 0, 0);
+//                } else if (scorer.distPhase == ScoringAssemblyV2.distancePhase.FAR) {
+//                    scorer.launcher.setVelo(235 * 2 * Math.PI / 628);
+//                    scorer.hood.hood.setPosition(32-32/72-32);
+//                }
+//            } else if (handler.GRANT_LAUNCHER_OFF) {
+//                scorer.launcher.setVelo(0);
+//            }
+
+            if (handler.AUTO_ADJUST && currentLocalType == localType.LIME) {
                 if (scorer.distPhase == ScoringAssemblyV2.distancePhase.ONE) {
-                    scorer.score(scorer.lldist, 165, 3, 0, 15);
+                    scorer.score(scorer.lldist, 165, 15, 0, 0);
                 } else if (scorer.distPhase == ScoringAssemblyV2.distancePhase.TWO) {
-                    scorer.score(scorer.lldist, 190, 0, 0, -10);
+                    scorer.score(scorer.lldist, 190, 15, 0, 0);
                 } else if (scorer.distPhase == ScoringAssemblyV2.distancePhase.THREE) {
-                    scorer.score(scorer.lldist, 200, 3, 0, 0);
+                    scorer.score(scorer.lldist, 200, 10, 0, 0);
+                } else if (scorer.distPhase == ScoringAssemblyV2.distancePhase.FAR) {
+                    scorer.launcher.setVelo(235 * 2 * Math.PI / 628);
+                    scorer.hood.hood.setPosition(32-32/72-32);
+                }
+            } else if (handler.AUTO_ADJUST && currentLocalType == localType.ODO) {
+                if (scorer.distPhase == ScoringAssemblyV2.distancePhase.ONE) {
+                    scorer.score(getDist(rrPose.position.x, rrPose.position.y), 165, 15, 0, 0);
+                } else if (scorer.distPhase == ScoringAssemblyV2.distancePhase.TWO) {
+                    scorer.score(getDist(rrPose.position.x, rrPose.position.y), 190, 15, 0, 0);
+                } else if (scorer.distPhase == ScoringAssemblyV2.distancePhase.THREE) {
+                    scorer.score(getDist(rrPose.position.x, rrPose.position.y), 200, 10, 0, 0);
                 } else if (scorer.distPhase == ScoringAssemblyV2.distancePhase.FAR) {
                     scorer.launcher.setVelo(235 * 2 * Math.PI / 628);
                     scorer.hood.hood.setPosition(32-32/72-32);
@@ -73,6 +144,9 @@ public class RobotV2 extends Mechanism {
             } else if (handler.GRANT_LAUNCHER_OFF) {
                 scorer.launcher.setVelo(0);
             }
+
+
+
 
             if (handler.GATE_IN) {
                 scorer.gate.setMode(Gate.GateMode.IN);
@@ -86,6 +160,14 @@ public class RobotV2 extends Mechanism {
                 scorer.hood.hood.setPosition(scorer.hood.hood.getPosition() + 0.1);
             } else if (handler.GRANT_HOOD_UP) {
                 scorer.hood.hood.setPosition(scorer.hood.hood.getPosition() - 0.1);
+            }
+
+            if (handler.TOGGLE_DRIVE_SPEED) {
+                if (db.activeDriveSpeed == Drivebase.driveSpeed.REGULAR) {
+                    db.activeDriveSpeed = Drivebase.driveSpeed.SLOW;
+                } else if (db.activeDriveSpeed == Drivebase.driveSpeed.SLOW) {
+                    db.activeDriveSpeed = Drivebase.driveSpeed.REGULAR;
+                }
             }
 
             // JOLIE CONTROLS
@@ -110,6 +192,15 @@ public class RobotV2 extends Mechanism {
 //            } else if (handler.FULL_UP) {
 //                //scorer.hood.hood.setPosition(0);
 //            }
+
+            if (handler.SWITCH_LOCAL) {
+                if (currentLocalType == localType.LIME) {
+                    currentLocalType = localType.ODO;
+                } else if (currentLocalType == localType.ODO) {
+                    currentLocalType = localType.LIME;
+                }
+            }
+
 //TODO can't stop the ramp
 //            if (handler.TOGGLE_DRIVE_SPEED) {
 //                if (db.activeDriveSpeed == Drivebase.driveSpeed.REGULAR) {
@@ -128,7 +219,7 @@ public class RobotV2 extends Mechanism {
     }
     public void shootThree () {
         if (timer.milliseconds() <= 100) {
-            if (scorer.limelight.llResult.isValid()) {
+            if (scorer.limelight.llResult != null && scorer.limelight.llResult.isValid()) {
             scorer.score(scorer.lldist, 190, 10, 0, -10);
             } else {
                 scorer.score(65 * 0.0254, 190, 10, 0, -10);
@@ -142,8 +233,25 @@ public class RobotV2 extends Mechanism {
             scorer.gate.setMode(Gate.GateMode.OFF);
             shootIsDone = true;
 
+        }
+
     }
 
+    private double getDist(double xTarget, double yTarget) {
+
+        double xDist = Math.abs(xTarget - rrPose.position.x);
+        double yDist = Math.abs(yTarget - rrPose.position.y);
+
+        double dist = Math.sqrt(Math.pow(xDist, 2) + Math.pow(yDist, 2));
+        return dist;
+    }
+
+    public double getCorretedHeading() {
+        if (Math.toDegrees(rrPose.heading.toDouble()) < 0) {
+            return Math.toDegrees(rrPose.heading.toDouble()) + 360;
+        } else {
+            return Math.toDegrees(rrPose.heading.toDouble());
+        }
     }
 
     @Override
@@ -151,5 +259,6 @@ public class RobotV2 extends Mechanism {
         scorer.telemetry(telemetry);
         //db.telemetry(telemetry);
         telemetry.addData("rr pose", rrPose);
+        telemetry.addData("current heading", getCorretedHeading());
     }
 }

@@ -30,6 +30,7 @@ public class Limelight extends Mechanism {
     private Pose2d globalPose = null;
     private double MAX_STALENESS = 1000;
     public boolean isStale;
+    public final double ballOffset = 2;
 
     @Override
     public void init(HardwareMap hwMap) {
@@ -43,14 +44,36 @@ public class Limelight extends Mechanism {
     @Override
     public void loop(AIMPad gamepad) {
         llResult = lime.getLatestResult();
+        if (llResult != null && llResult.isValid()) {
 
-        distance =  getDistance(llResult.getTa());
+            distance =  getDistance(llResult.getTa()) + ballOffset;
+        } else {
+            distance = 0;
+        }
+
+
+
     }
 
     public double getDistance(double ta) {
         double dist = 70.50987 * Math.pow(ta, -0.5421864);
          return dist;
     }
+
+    public YawPitchRollAngles getHeading() {
+
+        return llResult.getBotpose_MT2().getOrientation();
+    }
+
+//    public double getIdealHeading() {
+//        double targetBlueX = -60;
+//        double targetBlueY = -60;
+//        double deltaX = targetBlueX - llResult.getBotpose_MT2().getPosition().x;
+//        double deltaY = targetBlueY - llResult.getBotpose_MT2().getPosition().y;
+//
+//        return Math.toDegrees(Math.atan2(deltaY, deltaX));
+//    }
+
     public void telemetry(Telemetry telemetry) {
 
 

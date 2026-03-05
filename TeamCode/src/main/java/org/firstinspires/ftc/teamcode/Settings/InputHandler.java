@@ -5,6 +5,7 @@ import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gam
 import com.aimrobotics.aimlib.gamepad.AIMPad;
 
 public class InputHandler {
+    public boolean AUTO_AIM = false;
 
     // GRANT CONTROLS
     public boolean INTAKE_IN = false;
@@ -31,9 +32,13 @@ public class InputHandler {
     public boolean JOLIE_HOOD_DOWN = false;
 
     public boolean TOGGLE_DRIVE_SPEED = false;
+    public boolean SWITCH_LOCAL = false;
 
 
     public void updateInputs(AIMPad aimPad1, AIMPad aimPad2) {
+
+        AUTO_AIM = aimPad1.isDPadLeftPressed();
+        TOGGLE_DRIVE_SPEED = aimPad1.isBPressed();
 
         // GRANT CONTROLS
 
@@ -61,6 +66,8 @@ public class InputHandler {
 
         JOLIE_HOOD_UP = aimPad2.isDPadUpPressed();
         JOLIE_HOOD_DOWN= aimPad2.isDPadDownPressed();
+
+        SWITCH_LOCAL = aimPad2.isYPressed();
 
     }
 }

@@ -2,13 +2,10 @@ package org.firstinspires.ftc.teamcode.Subsystems;
 
 import com.aimrobotics.aimlib.gamepad.AIMPad;
 import com.aimrobotics.aimlib.util.Mechanism;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.OpModes.Teleop.TeleOp;
 import org.firstinspires.ftc.teamcode.Settings.ConfigInfo;
 
 public class Intake extends Mechanism {
