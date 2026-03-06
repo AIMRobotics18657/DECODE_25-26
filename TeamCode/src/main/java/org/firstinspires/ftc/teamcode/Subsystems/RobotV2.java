@@ -134,12 +134,12 @@ public class RobotV2 extends Mechanism {
                 if (scorer.distPhase == ScoringAssemblyV2.distancePhase.ONE) {
                     scorer.score(getDist(rrPose.position.x, rrPose.position.y), 165, 15, 0, 0);
                 } else if (scorer.distPhase == ScoringAssemblyV2.distancePhase.TWO) {
-                    scorer.score(getDist(rrPose.position.x, rrPose.position.y), 190, 15, 0, 0);
+                    scorer.score(getDist(rrPose.position.x, rrPose.position.y), 190, 10, 0, 0);
                 } else if (scorer.distPhase == ScoringAssemblyV2.distancePhase.THREE) {
                     scorer.score(getDist(rrPose.position.x, rrPose.position.y), 200, 10, 0, 0);
                 } else if (scorer.distPhase == ScoringAssemblyV2.distancePhase.FAR) {
-                    scorer.launcher.setVelo(235 * 2 * Math.PI / 628);
-                    scorer.hood.hood.setPosition(32-32/72-32);
+                    scorer.launcher.setVelo(265 * 2 * Math.PI / 628);
+                    scorer.hood.hood.setPosition(38-32/72-32);
                 }
             } else if (handler.GRANT_LAUNCHER_OFF) {
                 scorer.launcher.setVelo(0);
@@ -258,6 +258,7 @@ public class RobotV2 extends Mechanism {
     public void telemetry(Telemetry telemetry) {
         scorer.telemetry(telemetry);
         //db.telemetry(telemetry);
+        telemetry.addData("localization type", currentLocalType);
         telemetry.addData("rr pose", rrPose);
         telemetry.addData("current heading", getCorretedHeading());
     }

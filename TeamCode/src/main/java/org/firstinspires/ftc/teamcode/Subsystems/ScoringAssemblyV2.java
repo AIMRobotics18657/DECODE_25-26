@@ -56,9 +56,9 @@ public class ScoringAssemblyV2 extends Mechanism {
                 distPhase = distancePhase.ONE;
             } else if (limelight.distance > 55 && limelight.distance <= 70) {
                 distPhase = distancePhase.TWO;
-            } else if (limelight.distance > 72 && limelight.distance <= 82) {
+            } else if (limelight.distance > 72 && limelight.distance <= 85) {
                 distPhase = distancePhase.THREE;
-            } else if (limelight.distance > 82) {
+            } else if (limelight.distance > 85) {
                 distPhase = distancePhase.FAR;
             }
         } else {
