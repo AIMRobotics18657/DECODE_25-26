@@ -1,0 +1,50 @@
+package com.example.meepmeep.CloseSkip;
+
+import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.Vector2d;
+import com.noahbres.meepmeep.MeepMeep;
+import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
+import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
+
+public class MeepsRedCloseSkip {
+    public static void main(String[] args) {
+        MeepMeep meepMeep = new MeepMeep(800);
+
+        RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
+                // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
+                .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
+                .setDimensions(18, 16)
+                .build();
+
+        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-55 + Math.sqrt(50),55 - Math.sqrt(50), Math.toRadians(135))) // starts with middle on launch line
+                .strafeTo(new Vector2d(-15, 15))
+                .waitSeconds(3)
+                .setTangent(Math.toRadians(-90))
+                .splineToLinearHeading(new Pose2d(-11.5, 25, Math.toRadians(90)), Math.toRadians(90))
+                .splineToLinearHeading(new Pose2d(-11.5, 53, Math.toRadians(90)), Math.toRadians(90)) // push into wall
+                .setTangent(Math.toRadians(-90))
+                .splineToLinearHeading(new Pose2d(-15, 15, Math.toRadians(135)), Math.toRadians(-90)) // go to shooting
+                .waitSeconds(3) // shoot
+
+                // next three artifacts
+                .setTangent(Math.toRadians(45))
+                .splineToLinearHeading(new Pose2d(12, 25, Math.toRadians(90)), Math.toRadians(90)) // setup position
+                .splineToLinearHeading(new Pose2d(12, 53, Math.toRadians(90)), Math.toRadians(90)) // push into wall has to be 90
+                .setTangent(Math.toRadians(90))
+                .strafeTo(new Vector2d(12, 33))
+                .splineToLinearHeading(new Pose2d(-15, 15, Math.toRadians(135)), Math.toRadians(-90)) // go to shooting
+                .waitSeconds(3)
+                //park
+                .setTangent(Math.toRadians(320))
+                .strafeTo(new Vector2d(35, 45))
+                .build());
+
+
+
+        meepMeep.setBackground(MeepMeep.Background.FIELD_DECODE_JUICE_DARK)
+                .setDarkMode(true)
+                .setBackgroundAlpha(0.95f)
+                .addEntity(myBot)
+                .start();
+    }
+}
