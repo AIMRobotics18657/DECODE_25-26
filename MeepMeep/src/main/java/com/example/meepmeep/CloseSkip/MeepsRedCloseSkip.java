@@ -20,20 +20,23 @@ public class MeepsRedCloseSkip {
                 .strafeTo(new Vector2d(-15, 15))
                 .waitSeconds(3)
                 .setTangent(Math.toRadians(-90))
-                .splineToLinearHeading(new Pose2d(-11.5, 25, Math.toRadians(90)), Math.toRadians(90))
-                .splineToLinearHeading(new Pose2d(-11.5, 53, Math.toRadians(90)), Math.toRadians(90)) // push into wall
+                .splineToLinearHeading(new Pose2d(-5.5, 25, Math.toRadians(90)), Math.toRadians(90))
+                .splineToLinearHeading(new Pose2d(-5.5, 53, Math.toRadians(90)), Math.toRadians(90)) // push into wall
                 .setTangent(Math.toRadians(-90))
                 .splineToLinearHeading(new Pose2d(-15, 15, Math.toRadians(135)), Math.toRadians(-90)) // go to shooting
-                .waitSeconds(3) // shoot
+                .waitSeconds(0.1) // shoot
 
                 // next three artifacts
                 .setTangent(Math.toRadians(45))
-                .splineToLinearHeading(new Pose2d(12, 25, Math.toRadians(90)), Math.toRadians(90)) // setup position
-                .splineToLinearHeading(new Pose2d(12, 53, Math.toRadians(90)), Math.toRadians(90)) // push into wall has to be 90
+                //.splineToLinearHeading(new Pose2d(12, 25, Math.toRadians(90)), Math.toRadians(90)) // setup position
+                        .strafeTo(new Vector2d(12,25))
+                        .turnTo(Math.toRadians(90))
+                .splineToLinearHeading(new Pose2d(12, 64, Math.toRadians(90)), Math.toRadians(90)) // push into wall has to be 90
                 .setTangent(Math.toRadians(90))
                 .strafeTo(new Vector2d(12, 33))
                 .splineToLinearHeading(new Pose2d(-15, 15, Math.toRadians(135)), Math.toRadians(-90)) // go to shooting
-                .waitSeconds(3)
+                .waitSeconds(0.1)
+
                 //park
                 .setTangent(Math.toRadians(320))
                 .strafeTo(new Vector2d(35, 45))

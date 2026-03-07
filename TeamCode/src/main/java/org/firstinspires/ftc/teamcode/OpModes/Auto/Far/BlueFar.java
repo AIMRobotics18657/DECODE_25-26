@@ -17,7 +17,7 @@ public class BlueFar extends LinearOpMode {
     double SHOOTING_ANGLE = (Math.PI) - Math.atan((double) -44 / 118.5);
     Pose2d SHOOTING_POS = new Pose2d(55, -15, SHOOTING_ANGLE);
     boolean isDone = false;
-    RobotV2 robot = new RobotV2(SHOOTING_POS, true);
+    RobotV2 robot = new RobotV2(SHOOTING_POS, true, false);
     public void runOpMode() {
         robot.init(hardwareMap);
 

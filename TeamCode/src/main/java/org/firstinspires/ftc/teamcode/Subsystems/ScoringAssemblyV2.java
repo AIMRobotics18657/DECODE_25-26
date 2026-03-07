@@ -47,29 +47,6 @@ public class ScoringAssemblyV2 extends Mechanism {
         hood.loop(aimPad);
         gate.loop(aimPad);
         limelight.loop(aimPad);
-
-
-        if (limelight.llResult != null && limelight.llResult.isValid()) {
-            lldist = limelight.distance * 0.0254;
-
-            if (limelight.distance <= 55) {
-                distPhase = distancePhase.ONE;
-            } else if (limelight.distance > 55 && limelight.distance <= 70) {
-                distPhase = distancePhase.TWO;
-            } else if (limelight.distance > 72 && limelight.distance <= 85) {
-                distPhase = distancePhase.THREE;
-            } else if (limelight.distance > 85) {
-                distPhase = distancePhase.FAR;
-            }
-        } else {
-            distPhase = distancePhase.NA;
-        }
-
-
-
-
-
-
     }
 
     /**
@@ -83,10 +60,8 @@ public class ScoringAssemblyV2 extends Mechanism {
         double hoodOmegaScaled = omega * gearRatio;
         double offsetDist = dist + distOffset;
         double offsetOmega = hoodOmegaScaled - omegaOffset;
-        hood.hood.setPosition(hoodDegrees(offsetDist, offsetOmega, offsetDeg));
+        hood.setPosition(hoodDegrees(offsetDist, offsetOmega, offsetDeg));
         launcher.setVelo(launcherOmegaScaled);
-
-        //TODO add thing for gate to sync with the hood and launcher
     }
 
     private double hoodDegrees(double dist, double omega, double offsetDeg){

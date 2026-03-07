@@ -104,7 +104,7 @@ public class Drivebase {
         }
     }
 
-//    public void telemetry(Telemetry telemetry) {
-//        telemetry.addData("Drive Speed: ", activeDriveSpeed);
-//    }
+    public void telemetry(Telemetry telemetry) {
+        telemetry.addData("Drive Speed: ", activeDriveSpeed);
+    }
 }

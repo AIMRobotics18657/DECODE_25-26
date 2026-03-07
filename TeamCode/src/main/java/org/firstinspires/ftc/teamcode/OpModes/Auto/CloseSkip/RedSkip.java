@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.Subsystems.RobotV2;
 @Autonomous(name="red skip")
 public class RedSkip extends LinearOpMode {
 
-    RobotV2 robot = new RobotV2(new Pose2d(-55 + Math.sqrt(50),-55 + Math.sqrt(50), Math.toRadians(-135)), true);
+    RobotV2 robot = new RobotV2(new Pose2d(-55 + Math.sqrt(50),55 - Math.sqrt(50), Math.toRadians(135)), true, true);
 
     boolean isDone = false;
 
@@ -26,29 +26,24 @@ public class RedSkip extends LinearOpMode {
 
         Action initialShoot = robot.db.drive.actionBuilder(new Pose2d(-55 + Math.sqrt(50),55 - Math.sqrt(50), Math.toRadians(135)))
                 .strafeTo(new Vector2d(-15, 15))
-                .waitSeconds(3)
+                .waitSeconds(0.1)
+                .build();
+
+        Action getFirstBalls = robot.db.drive.actionBuilder(new Pose2d(-15, 15, Math.toRadians(135)))
                 .setTangent(Math.toRadians(-90))
-                .splineToLinearHeading(new Pose2d(-11.5, 25, Math.toRadians(90)), Math.toRadians(90))
-                .splineToLinearHeading(new Pose2d(-11.5, 53, Math.toRadians(90)), Math.toRadians(90)) // push into wall
+                .splineToLinearHeading(new Pose2d(-5.5, 25, Math.toRadians(90)), Math.toRadians(90))
+                .splineToLinearHeading(new Pose2d(-5.5, 53, Math.toRadians(90)), Math.toRadians(90)) // push into wall
                 .setTangent(Math.toRadians(-90))
                 .splineToLinearHeading(new Pose2d(-15, 15, Math.toRadians(135)), Math.toRadians(-90)) // go to shooting
                 .waitSeconds(0.1) // shoot
                 .build();
 
-        Action getFirstBalls = robot.db.drive.actionBuilder(new Pose2d(-15, 15, Math.toRadians(135)))
-                .setTangent(Math.toRadians(45))
-                .splineToLinearHeading(new Pose2d(12, 25, Math.toRadians(90)), Math.toRadians(90)) // setup position
-                .splineToLinearHeading(new Pose2d(12, 53, Math.toRadians(90)), Math.toRadians(90)) // push into wall has to be 90
-                .setTangent(Math.toRadians(90))
-                .strafeTo(new Vector2d(12, 33))
-                .splineToLinearHeading(new Pose2d(-15, 15, Math.toRadians(135)), Math.toRadians(-90)) // go to shooting
-                .waitSeconds(0.1)
-                .build();
 
         Action getSecondBalls = robot.db.drive.actionBuilder(new Pose2d(-15, -15, Math.toRadians(-135)))
                 .setTangent(Math.toRadians(45))
-                .splineToLinearHeading(new Pose2d(12, 25, Math.toRadians(90)), Math.toRadians(90)) // setup position
-                .splineToLinearHeading(new Pose2d(12, 53, Math.toRadians(90)), Math.toRadians(90)) // push into wall has to be 90
+                .strafeTo(new Vector2d(12,25))//issues here
+                .turnTo(Math.toRadians(90))// and here, makes a big circle instead of strafing, why? cuz we set the tangent?
+                .splineToLinearHeading(new Pose2d(12, 64, Math.toRadians(90)), Math.toRadians(90)) // push into wall has to be 90
                 .setTangent(Math.toRadians(90))
                 .strafeTo(new Vector2d(12, 33))
                 .splineToLinearHeading(new Pose2d(-15, 15, Math.toRadians(135)), Math.toRadians(-90)) // go to shooting

@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.Subsystems.RobotV2;
 
 @Autonomous (name="blue auto")
 public class AutonBlue extends LinearOpMode {
-    RobotV2 robot = new RobotV2(new Pose2d(-55 + Math.sqrt(50),-55 + Math.sqrt(50), Math.toRadians(-135)), true);
+    RobotV2 robot = new RobotV2(new Pose2d(-55 + Math.sqrt(50),-55 + Math.sqrt(50), Math.toRadians(-135)), true, false);
 
     boolean isDone = false;
 

@@ -17,7 +17,7 @@ public class MeepsBlueCloseSkip {
                 .build();
 
         myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-55 + Math.sqrt(50),-55 + Math.sqrt(50), Math.toRadians(-135))) // starts with middle on launch line
-                .strafeTo(new Vector2d(-15, -15))
+                .strafeTo(new Vector2d(-1, -15))
                 .waitSeconds(3)
                 .setTangent(Math.toRadians(-90))
                 .splineToLinearHeading(new Pose2d(-11.5, -25, Math.toRadians(-90)), Math.toRadians(-90))

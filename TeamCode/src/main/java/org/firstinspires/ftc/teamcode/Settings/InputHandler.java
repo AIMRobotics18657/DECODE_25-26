@@ -34,6 +34,8 @@ public class InputHandler {
     public boolean TOGGLE_DRIVE_SPEED = false;
     public boolean SWITCH_LOCAL = false;
 
+    public boolean RESET_LOCAL = false;
+
 
     public void updateInputs(AIMPad aimPad1, AIMPad aimPad2) {
 
@@ -68,6 +70,7 @@ public class InputHandler {
         JOLIE_HOOD_DOWN= aimPad2.isDPadDownPressed();
 
         SWITCH_LOCAL = aimPad2.isYPressed();
+        RESET_LOCAL = aimPad2.isDPadRightPressed();
 
     }
 }

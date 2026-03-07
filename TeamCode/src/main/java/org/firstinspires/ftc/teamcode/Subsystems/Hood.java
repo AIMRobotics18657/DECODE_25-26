@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.Settings.ConfigInfo;
 public class Hood extends Mechanism {
 
     public Servo hood;
+    double correctedPos;
 
     @Override
     public void init(HardwareMap hwMap) {
@@ -23,6 +24,18 @@ public class Hood extends Mechanism {
     @Override
     public void loop (AIMPad aimPad) {
 
+    }
+
+    public void setPosition(double position) {
+
+        if (position > 1) {
+            correctedPos = 1;
+        } else if (position < 0) {
+            correctedPos = 0;
+        } else {
+            correctedPos = position;
+        }
+        hood.setPosition(correctedPos);
     }
 
     @Override

@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.Subsystems.RobotV2;
 
 @Autonomous (name="red auto")
 public class AutonRed extends LinearOpMode {
-    RobotV2 robot = new RobotV2(new Pose2d(-55 + Math.sqrt(50),55 - Math.sqrt(50), Math.toRadians(135)), true);
+    RobotV2 robot = new RobotV2(new Pose2d(-55 + Math.sqrt(50),55 - Math.sqrt(50), Math.toRadians(135)), true, true);
 
     boolean isDone = false;
 
@@ -40,8 +40,8 @@ public class AutonRed extends LinearOpMode {
 
         Action getSecondBalls = robot.db.drive.actionBuilder(new Pose2d(-10, 10, Math.toRadians(135)))
                 .setTangent(Math.toRadians(45))
-                .splineToLinearHeading(new Pose2d(15, 20, Math.toRadians(90)), Math.toRadians(90)) // setup position
-                .splineToLinearHeading(new Pose2d(15, 53, Math.toRadians(90)), Math.toRadians(90)) // push into wall has to be 90
+                .splineToLinearHeading(new Pose2d(18, 20, Math.toRadians(90)), Math.toRadians(90)) // setup position
+                .splineToLinearHeading(new Pose2d(18, 63, Math.toRadians(90)), Math.toRadians(90)) // push into wall has to be 90
                 .setTangent(Math.toRadians(270))
                 .splineToLinearHeading(new Pose2d(-10, 10, Math.toRadians(135)), Math.toRadians(270)) // go to shooting
                 .waitSeconds(0.1)
@@ -49,10 +49,10 @@ public class AutonRed extends LinearOpMode {
 
         Action getThirdBalls = robot.db.drive.actionBuilder(new Pose2d(-10, 10, Math.toRadians(135)))
                 .setTangent(Math.toRadians(10))
-                .splineToLinearHeading(new Pose2d(40, 15, Math.toRadians(90)), Math.toRadians(15))//setup(might be hard to stop on a dime here)
+                .splineToLinearHeading(new Pose2d(43, 15, Math.toRadians(90)), Math.toRadians(15))//setup(might be hard to stop on a dime here)
                 .setTangent(Math.toRadians(90))
                 .setTangent(Math.toRadians(90))
-                .splineToLinearHeading(new Pose2d(40, 53, Math.toRadians(90)), Math.toRadians(90))//collect
+                .splineToLinearHeading(new Pose2d(43, 63, Math.toRadians(90)), Math.toRadians(90))//collect
                 .setTangent(Math.toRadians(270))
                 .splineToLinearHeading(new Pose2d(-10, 10, Math.toRadians(135)), Math.toRadians(230))//to shooting
                 .waitSeconds(0.1)
