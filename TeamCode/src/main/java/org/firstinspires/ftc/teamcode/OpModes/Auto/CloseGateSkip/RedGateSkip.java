@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.OpModes.Auto.CloseSkip;
+package org.firstinspires.ftc.teamcode.OpModes.Auto.CloseGateSkip;
 
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ParallelAction;
@@ -10,14 +10,13 @@ import com.aimrobotics.aimlib.gamepad.AIMPad;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.OpModes.Auto.AutoConstants;
 import org.firstinspires.ftc.teamcode.Subsystems.Intake;
 import org.firstinspires.ftc.teamcode.Subsystems.RobotV2;
 
-@Autonomous(name="blue skip")
-public class BlueSkip extends LinearOpMode {
+@Autonomous(name="red gate skip")
+public class RedGateSkip extends LinearOpMode {
 
-    RobotV2 robot = new RobotV2(AutoConstants.BLUE_START, true, false);
+    RobotV2 robot = new RobotV2(new Pose2d(-55 + Math.sqrt(50),55 - Math.sqrt(50), Math.toRadians(135)), true, false);
 
     boolean isDone = false;
 
@@ -25,32 +24,37 @@ public class BlueSkip extends LinearOpMode {
     public void runOpMode() {
         robot.init(hardwareMap);
 
-        Action initialShoot = robot.db.drive.actionBuilder(AutoConstants.BLUE_START)
-                .strafeTo(AutoConstants.BLUE_SHOOT_VECTOR)
+        Action initialShoot = robot.db.drive.actionBuilder(new Pose2d(-55 + Math.sqrt(50),55 + Math.sqrt(50), Math.toRadians(135)))
+                .strafeTo(new Vector2d(-10, 10))
                 .waitSeconds(0.1)
-                .setTangent(Math.toRadians(-90))
+                .setTangent(90)
                 .build();
 
-        Action getFirstBalls = robot.db.drive.actionBuilder(AutoConstants.BLUE_SHOOT)
-                .splineToLinearHeading(AutoConstants.BLUE_LINE_ONE_SETUP, Math.toRadians(-90))
-                .splineToLinearHeading(AutoConstants.BLUE_LINE_ONE_WALL, Math.toRadians(-90)) // push into wall
-                .setTangent(Math.toRadians(90))
-                .splineToLinearHeading(AutoConstants.BLUE_SHOOT, Math.toRadians(90)) // go to shooting
+        Action getFirstBalls = robot.db.drive.actionBuilder(new Pose2d(-10, 10, Math.toRadians(135)))
+                .splineToLinearHeading(new Pose2d(-11.5, 25, Math.toRadians(90)), Math.toRadians(90))
+                .splineToLinearHeading(new Pose2d(-11.5, 53, Math.toRadians(90)), Math.toRadians(90)) // push into wall
+                .setTangent(Math.toRadians(270))
+                .splineToLinearHeading(new Pose2d(-10, 10, Math.toRadians(135)), Math.toRadians(270)) // go to shooting
                 .waitSeconds(0.1) // shoot
                 .build();
 
-        Action getSecondBalls = robot.db.drive.actionBuilder(AutoConstants.BLUE_SHOOT)
-                .setTangent(Math.toRadians(-45))
-                .splineToLinearHeading(AutoConstants.BLUE_LINE_TWO_SETUP, Math.toRadians(-90)) // setup position
-                .splineToLinearHeading(AutoConstants.BLUE_LINE_TWO_WALL, Math.toRadians(-90)) // push into wall has to be 90
-                .setTangent(Math.toRadians(90))
-                .splineToLinearHeading(AutoConstants.BLUE_SHOOT, Math.toRadians(90)) // go to shooting
+        Action getSecondBalls = robot.db.drive.actionBuilder(new Pose2d(-10, 10, Math.toRadians(135)))
+                .setTangent(Math.toRadians(45))
+                .splineToLinearHeading(new Pose2d(12, 25, Math.toRadians(90)), Math.toRadians(90)) // setup position
+                .splineToLinearHeading(new Pose2d(12, 65, Math.toRadians(90)), Math.toRadians(90)) // push into wall has to be 90
+                .setTangent(Math.toRadians(270))
+                .splineToLinearHeading(new Pose2d(-10, 10, Math.toRadians(135)), Math.toRadians(270)) // go to shooting
                 .waitSeconds(0.1)
                 .build();
 
-        Action park = robot.db.drive.actionBuilder(AutoConstants.BLUE_SHOOT)
-                .setTangent(Math.toRadians(-320))
-                .strafeTo(new Vector2d(35, -45))
+        Action openGate = robot.db.drive.actionBuilder(new Pose2d(-10, 10, Math.toRadians(135)))
+                .splineToLinearHeading(new Pose2d(1.6, 54, Math.toRadians(270)), Math.toRadians(90))
+                .waitSeconds(0.1)
+                .build();
+
+        Action park = robot.db.drive.actionBuilder(new Pose2d(1.6, 54, Math.toRadians(270)))
+                .setTangent(Math.toRadians(320))
+                .splineToLinearHeading(new Pose2d(38, -33, Math.toRadians(90)), Math.toRadians(330))
                 .build();
 
 
@@ -92,8 +96,9 @@ public class BlueSkip extends LinearOpMode {
                                 robot.shootThree();
                                 return !robot.shootIsDone;
                             },
+                            openGate,
                             park
-                            )
+                    )
                     )
             );
         }

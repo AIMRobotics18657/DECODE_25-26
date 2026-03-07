@@ -29,12 +29,12 @@ public class MeepsBlueCloseGateSkip {
                 // next three artifacts
                 .setTangent(Math.toRadians(-45))
                 .splineToLinearHeading(new Pose2d(12, -25, Math.toRadians(-90)), Math.toRadians(-90)) // setup position
-                .splineToLinearHeading(new Pose2d(12, -53, Math.toRadians(-90)), Math.toRadians(-90)) // push into wall has to be 90
+                .splineToLinearHeading(new Pose2d(12, -65, Math.toRadians(-90)), Math.toRadians(-90)) // push into wall has to be 90
                 .setTangent(Math.toRadians(90))
                 .splineToLinearHeading(new Pose2d(-10, -10, Math.toRadians(-135)), Math.toRadians(90)) // go to shooting
                 .waitSeconds(3)
                 //gate
-                .splineToLinearHeading(new Pose2d(1.6, -54, Math.toRadians(180)), Math.toRadians(-90))
+                .splineToLinearHeading(new Pose2d(1.6, -54, Math.toRadians(90)), Math.toRadians(-90))
                 .waitSeconds(3)
                 //park
                 .setTangent(Math.toRadians(-320))

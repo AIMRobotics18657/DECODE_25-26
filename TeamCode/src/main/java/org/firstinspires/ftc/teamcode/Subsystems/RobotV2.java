@@ -207,7 +207,7 @@ public class RobotV2 extends Mechanism {
     }
     public void shootThree () {
         if (timer.milliseconds() <= 100) {
-                scorer.score(65 * 0.0254, 190, 10, 0, -10);
+                scorer.score(63 * 0.0254, 190, 10, 0, -10);
 
         } else if (timer.milliseconds() > 200 && timer.milliseconds() <= 3000) {
             scorer.gate.setMode(Gate.GateMode.IN);

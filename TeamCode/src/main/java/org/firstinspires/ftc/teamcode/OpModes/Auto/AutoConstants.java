@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.OpModes.Auto;
 
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.Vector2d;
 
 public class AutoConstants {
     public final double ROBOT_WIDTH = 15.2;
@@ -17,5 +18,27 @@ public class AutoConstants {
     public static final Pose2d RED_LINE_THREE_SETUP = new Pose2d(36, 25, Math.toRadians(90));
     public static final Pose2d RED_LINE_THREE_WALL = new Pose2d(36, 53, Math.toRadians(90));
     public static final Pose2d RED_PARK = new Pose2d(38, -33, Math.toRadians(90));
+
+
+
+    public static final Pose2d RED_SHOOT = new Pose2d(-10, 10, Math.toRadians(135));
+    public static final Pose2d BLUE_START = new Pose2d(-55 + Math.sqrt(50),-55 + Math.sqrt(50), Math.toRadians(-135));
+    public static final Pose2d BLUE_SHOOT = new Pose2d(-15, -15, Math.toRadians(-135));
+    public static final Vector2d BLUE_SHOOT_VECTOR = new Vector2d(-15,-15);
+
+    public static final Pose2d BLUE_LINE_ONE_SETUP = new Pose2d(-8.5, -25, Math.toRadians(-90));
+
+    public static final Pose2d BLUE_LINE_ONE_WALL = new Pose2d(-8.5, -63, Math.toRadians(-90));
+
+    public static final Pose2d BLUE_GATE_SETUP = new Pose2d(9, -50, Math.toRadians(90));
+    public static final Vector2d BLUE_GATE_OPEN = new Vector2d(9, -70);
+
+    public static final Pose2d BLUE_LINE_TWO_SETUP = new Pose2d(16, -25, Math.toRadians(-90));
+
+    public static final Pose2d BLUE_LINE_TWO_WALL = new Pose2d(16, -74, Math.toRadians(-90));
+
+    public static final Pose2d BLUE_LINE_THREE_SETUP = new Pose2d(39, -25, Math.toRadians(-90));
+
+    public static final Pose2d BLUE_LINE_THREE_WALL = new Pose2d(39, -74, Math.toRadians(-90));
 
 }
