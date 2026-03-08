@@ -69,4 +69,9 @@ public class AutoConstants {
     public static final double  BLUE_FAR_SHOOTING_ANGLE = (Math.PI) - Math.atan((double) -44 / 124);
     public static final Pose2d BLUE_FAR_SHOOT = new Pose2d(55, -15, BLUE_FAR_SHOOTING_ANGLE);
 
+    public static final Pose2d RED_FAR_START = new Pose2d(63, 8, Math.toRadians(180));
+
+    public static final double RED_FAR_SHOOTING_ANGLE = (Math.PI) - Math.atan((double) 44 / 124);
+
+    public static final Pose2d RED_FAR_SHOOT = new Pose2d(55, 15, RED_FAR_SHOOTING_ANGLE);
 }
