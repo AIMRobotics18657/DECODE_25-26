@@ -61,7 +61,7 @@ public class AutonBlue extends LinearOpMode {
 
         Action park = robot.db.drive.actionBuilder(AutoConstants.BLUE_SHOOT)
                 .setTangent(Math.toRadians(-320))
-                .splineToLinearHeading(new Pose2d(38, 33, Math.toRadians(-90)), Math.toRadians(-330))
+                .splineToLinearHeading(new Pose2d(38, -33, Math.toRadians(-90)), Math.toRadians(-330))
                 .build();
 
 
