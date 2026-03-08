@@ -27,38 +27,31 @@ public class RedFar extends LinearOpMode {
 
         Action getFirstBalls = robot.db.drive.actionBuilder(AutoConstants.RED_FAR_SHOOT)
                 .setTangent(Math.toRadians(180))
-                .splineToLinearHeading(new Pose2d(32, 25, Math.toRadians(90)), Math.toRadians(90))//setup(might be hard to stop on a dime here)
+                .splineToLinearHeading(new Pose2d(39, 15, Math.toRadians(90)), Math.toRadians(180))//setup
                 .setTangent(Math.toRadians(90))
-                .setTangent(Math.toRadians(90))
-                .splineToLinearHeading(new Pose2d(32, 63, Math.toRadians(90)), Math.toRadians(-90))//collect
-                .setTangent(Math.toRadians(-90))
-                .splineToLinearHeading(AutoConstants.RED_FAR_SHOOT, Math.toRadians(0))//to shooting
+                .splineToLinearHeading(new Pose2d(30, 59, Math.toRadians(90)), Math.toRadians(-90))//collect
+                .setTangent(Math.toRadians(270))
+                .splineToLinearHeading(AutoConstants.RED_FAR_SHOOT, Math.toRadians(0))
                 .waitSeconds(0.1)
                 .build();
 
         Action gateBalls = robot.db.drive.actionBuilder(AutoConstants.RED_FAR_SHOOT)
-                //.splineToLinearHeading(new Pose2d(50.8, -40, Math.toRadians(-90)), Math.toRadians(-90))
-//                .strafeTo(new Vector2d(59, -65))
-//                .strafeTo(new Vector2d(59, -40))
-//                .strafeTo(new Vector2d(34, -40))
-//                .strafeTo(new Vector2d(34, -65))
-//                .strafeTo(new Vector2d(34, -40))
                 .setTangent(Math.toRadians(-230))
-                .splineToLinearHeading(new Pose2d(35, 40, Math.toRadians(-340)), Math.toRadians(-320))
-                //.splineToLinearHeading(new Pose2d(38, -62, Math.toRadians(0)), Math.toRadians(270))
-                .strafeTo(new Vector2d(55,72))
-                .strafeTo(new Vector2d(40,55))
+                .splineToLinearHeading(new Pose2d(30, 45, Math.toRadians(-340)), Math.toRadians(-320))
+                .strafeTo(new Vector2d(55,55))
+                .strafeTo(new Vector2d(40,45))
                 .turnTo(Math.toRadians(0))
-                .strafeTo(new Vector2d(62, 66))
+                .strafeTo(new Vector2d(62, 55))
                 .setTangent(Math.toRadians(-90))
 
-                .splineToLinearHeading(AutoConstants.RED_FAR_SHOOT, Math.toRadians(-90))
+                .splineToLinearHeading(AutoConstants.RED_FAR_SHOOT, Math.toRadians(180))
                 .waitSeconds(0.1)
                 .build();
 
-        Action park = robot.db.drive.actionBuilder(AutoConstants.BLUE_FAR_SHOOT)
+        Action park = robot.db.drive.actionBuilder(AutoConstants.RED_FAR_SHOOT)
                 .setTangent(Math.toRadians(180))
-                .splineToLinearHeading(new Pose2d(40, 15, Math.toRadians(180)), Math.toRadians(180))
+                .strafeTo(new Vector2d(40, 15))
+                //.splineToLinearHeading(new Pose2d(40, 15, Math.toRadians(180)), Math.toRadians(180))
                 .build();
 
         waitForStart();
@@ -69,8 +62,8 @@ public class RedFar extends LinearOpMode {
                             (telemetryPacket) -> {
                                 robot.loop(new AIMPad(gamepad1), new AIMPad(gamepad2));
                                 robot.scorer.intake.setMode(Intake.IntakeMode.IN);
-                                robot.scorer.launcher.setVelo(255 * 2 * Math.PI / 628);
-                                robot.scorer.hood.setPosition((38-32)/(72-32));
+                                robot.scorer.launcher.setVelo(265 * 2 * Math.PI / 628);
+                                robot.scorer.hood.setPosition((35-32)/(72-32));
                                 return !isDone;
                             },
                             new SequentialAction(

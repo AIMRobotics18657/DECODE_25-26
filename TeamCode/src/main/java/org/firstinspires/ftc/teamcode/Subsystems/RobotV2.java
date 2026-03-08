@@ -119,8 +119,8 @@ public class RobotV2 extends Mechanism {
                 } else if (scorer.distPhase == ScoringAssemblyV2.distancePhase.THREE) {
                     scorer.score(scorer.lldist, 200, 10, 0, 0);
                 } else if (scorer.distPhase == ScoringAssemblyV2.distancePhase.FAR) {
-                    scorer.launcher.setVelo(255 * 2 * Math.PI / 628);
-                    scorer.hood.setPosition((32-32)/(72-32));
+                    scorer.launcher.setVelo(265 * 2 * Math.PI / 628);
+                    scorer.hood.setPosition((38-32)/(72-32));
                 }
             } else if (handler.AUTO_ADJUST && currentLocalType == localType.ODO) {
                 if (scorer.distPhase == ScoringAssemblyV2.distancePhase.ONE) {
@@ -130,8 +130,8 @@ public class RobotV2 extends Mechanism {
                 } else if (scorer.distPhase == ScoringAssemblyV2.distancePhase.THREE) {
                     scorer.score(odoDistMeters, 200, 10, 0, 0);
                 } else if (scorer.distPhase == ScoringAssemblyV2.distancePhase.FAR) {
-                    scorer.launcher.setVelo(255 * 2 * Math.PI / 628);
-                    scorer.hood.setPosition((32-32)/(72-32));
+                    scorer.launcher.setVelo(265 * 2 * Math.PI / 628);
+                    scorer.hood.setPosition((38-32)/(72-32));
                 }
             } else if (handler.GRANT_LAUNCHER_OFF) {
                 scorer.launcher.setVelo(0);
@@ -212,7 +212,7 @@ public class RobotV2 extends Mechanism {
         } else if (timer.milliseconds() > 200 && timer.milliseconds() <= 3000) {
             scorer.gate.setMode(Gate.GateMode.IN);
             scorer.intake.setMode(Intake.IntakeMode.IN);
-        } else if (timer.milliseconds() > 1000) {
+        } else if (timer.milliseconds() > 3000) {
             scorer.launcher.setVelo(0);
             scorer.gate.setMode(Gate.GateMode.OFF);
             shootIsDone = true;
@@ -220,11 +220,11 @@ public class RobotV2 extends Mechanism {
     }
 
     public void shootThreeFar () {
-        if (timer.milliseconds() <= 400) {
-        } else if (timer.milliseconds() > 400 && timer.milliseconds() <= 3000) {
+        if (timer.milliseconds() <= 600) {
+        } else if (timer.milliseconds() > 600 && timer.milliseconds() <= 3000) {
             scorer.gate.setMode(Gate.GateMode.IN);
             scorer.intake.setMode(Intake.IntakeMode.IN);
-        } else if (timer.milliseconds() > 1000) {
+        } else if (timer.milliseconds() > 3000) {
             scorer.launcher.setVelo(0);
             scorer.gate.setMode(Gate.GateMode.OFF);
             shootIsDone = true;
