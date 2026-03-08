@@ -75,4 +75,8 @@ public class AutoConstants {
     public static final double RED_FAR_SHOOTING_ANGLE = (Math.PI) - Math.atan((double) 44 / 124);
 
     public static final Pose2d RED_FAR_SHOOT = new Pose2d(55, 15, RED_FAR_SHOOTING_ANGLE);
+
+    public static final double FAR_LAUNCHER_FAST = 600 * 2 * Math.PI / 628;
+
+    public static final double FAR_LAUNCHER_NORMAL = 295 * 2 * Math.PI / 628;
 }

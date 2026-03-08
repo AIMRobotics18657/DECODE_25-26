@@ -69,35 +69,41 @@ public class BlueFar extends LinearOpMode {
                             (telemetryPacket) -> {
                                 robot.loop(new AIMPad(gamepad1), new AIMPad(gamepad2));
                                 robot.scorer.intake.setMode(Intake.IntakeMode.IN);
-                                robot.scorer.launcher.setVelo(295 * 2 * Math.PI / 628);
+                                //robot.scorer.launcher.setVelo(295 * 2 * Math.PI / 628);
                                 robot.scorer.hood.setPosition((35-32)/(72-32));
                                 return !isDone;
                             },
                             new SequentialAction(
                                     initialShoot,
                                     (telemetryPacket) -> {
+                                        robot.scorer.launcher.setVelo(AutoConstants.FAR_LAUNCHER_FAST);
                                         robot.setShoot();
                                         return false;
                                     },
                                     (telemetryPacket) -> {
+                                        robot.scorer.launcher.setVelo(AutoConstants.FAR_LAUNCHER_FAST);
                                         robot.shootThreeFar();
                                         return !robot.shootIsDone;
                                     },
                                     getFirstBalls,
                                     (telemetryPacket) -> {
+                                        robot.scorer.launcher.setVelo(AutoConstants.FAR_LAUNCHER_NORMAL);
                                         robot.setShoot();
                                         return false;
                                     },
                                     (telemetryPacket) -> {
+                                        robot.scorer.launcher.setVelo(AutoConstants.FAR_LAUNCHER_NORMAL);
                                         robot.shootThreeFar();
                                         return !robot.shootIsDone;
                                     },
                                     gateBalls,
                                     (telemetryPacket) -> {
+                                        robot.scorer.launcher.setVelo(AutoConstants.FAR_LAUNCHER_NORMAL);
                                         robot.setShoot();
                                         return false;
                                     },
                                     (telemetryPacket) -> {
+                                        robot.scorer.launcher.setVelo(AutoConstants.FAR_LAUNCHER_NORMAL);
                                         robot.shootThreeFar();
                                         return !robot.shootIsDone;
                                     },
