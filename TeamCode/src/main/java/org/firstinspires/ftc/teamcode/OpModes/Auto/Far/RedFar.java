@@ -69,28 +69,34 @@ public class RedFar extends LinearOpMode {
                             new SequentialAction(
                                     initialShoot,
                                     (telemetryPacket) -> {
+                                        robot.scorer.launcher.setVelo(AutoConstants.FAR_LAUNCHER_FAST);
                                         robot.setShoot();
                                         return false;
                                     },
                                     (telemetryPacket) -> {
+                                        robot.scorer.launcher.setVelo(AutoConstants.FAR_LAUNCHER_FAST);
                                         robot.shootThreeFar();
                                         return !robot.shootIsDone;
                                     },
                                     getFirstBalls,
                                     (telemetryPacket) -> {
+                                        robot.scorer.launcher.setVelo(AutoConstants.FAR_LAUNCHER_NORMAL);
                                         robot.setShoot();
                                         return false;
                                     },
                                     (telemetryPacket) -> {
+                                        robot.scorer.launcher.setVelo(AutoConstants.FAR_LAUNCHER_NORMAL);
                                         robot.shootThreeFar();
                                         return !robot.shootIsDone;
                                     },
                                     gateBalls,
                                     (telemetryPacket) -> {
+                                        robot.scorer.launcher.setVelo(AutoConstants.FAR_LAUNCHER_NORMAL);
                                         robot.setShoot();
                                         return false;
                                     },
                                     (telemetryPacket) -> {
+                                        robot.scorer.launcher.setVelo(AutoConstants.FAR_LAUNCHER_NORMAL);
                                         robot.shootThreeFar();
                                         return !robot.shootIsDone;
                                     },
