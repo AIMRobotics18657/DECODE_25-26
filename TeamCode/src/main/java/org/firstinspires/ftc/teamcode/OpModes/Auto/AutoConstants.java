@@ -2,6 +2,11 @@ package org.firstinspires.ftc.teamcode.OpModes.Auto;
 
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
+import com.pedropathing.follower.Follower;
+import com.pedropathing.follower.FollowerConstants;
+import com.pedropathing.ftc.FollowerBuilder;
+import com.pedropathing.paths.PathConstraints;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class AutoConstants {
 //    public final double ROBOT_WIDTH = 15.2;
@@ -79,4 +84,15 @@ public class AutoConstants {
     public static final double FAR_LAUNCHER_FAST = 600 * 2 * Math.PI / 628;
 
     public static final double FAR_LAUNCHER_NORMAL = 295 * 2 * Math.PI / 628;
+
+    public static FollowerConstants followerConstants = new FollowerConstants().mass(5);
+
+    public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);
+
+    public static Follower createFollower(HardwareMap hardwareMap) {
+        return new FollowerBuilder(followerConstants, hardwareMap)
+                .pathConstraints(pathConstraints)
+                .build();
+    }
+
 }
